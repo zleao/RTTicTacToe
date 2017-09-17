@@ -1,0 +1,84 @@
+﻿@using RTTicTacToe.Queries.Models
+
+@model Game
+
+@{
+    ViewData["Title"] = "";
+}
+
+@if (Model == null)
+{
+    <h2>Game Page</h2>
+
+    <p>Select a game to see it's status</p>
+}
+else
+{
+    <h2>Game Status</h2>
+    <div>
+        <p><strong>Id: </strong>@Model.Id</p>
+        <p><strong>Name: </strong> @Model.Name</p>
+        <p>
+            <strong>Player 1: </strong>
+            @if (Model.Player1 == null)
+            {
+                <a class="btn btn-default" asp-action="CreatePlayer" asp-route-number="1">
+                    <span class="glyphicon glyphicon-plus-sign" style="vertical-align:middle;margin-top: -4px"></span>  Create Player
+                </a>
+            }
+            else
+            {
+                @Model.Player1.Name
+            }
+        </p>
+        <p>
+            <strong>Player 2: </strong>
+            @if (Model.Player2 == null)
+            {
+                <a class="btn btn-default" asp-action="CreatePlayer" asp-route-number="2">
+                    <span class="glyphicon glyphicon-plus-sign" style="vertical-align:middle;margin-top: -4px"></span>  Create Player
+                </a>
+            }
+            else
+            {
+                @Model.Player2.Name
+            }
+        </p>
+        <p>
+            <strong>Movements:</strong>
+            @if (Model.Player1 != null && Model.Player2 != null)
+            {
+                <form class="form-horizontal" asp-action="AddMovement" method="post">
+                    <div class=”form-group”>
+                        <select name="player" class="form-control col-md-3">
+                            <option value="@Model.Player1.Id">@Model.Player1.Name</option>
+                            <option value="@Model.Player2.Id">@Model.Player2.Name</option>
+                        </select>
+                        <input name="x" class="form-control col-md-2" maxlength="1" inputmode="numeric" style="width:40px;" />
+                        <input name="y" class="form-control col-md-2" maxlength="1" inputmode="numeric" style="width:40px;" />
+                        <input type="submit" value="Add" class="btn btn-primary col-md-1" />
+                    </div>
+                </form>
+            }
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Player</th>
+                        <th>Movement</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Movements)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PlayerId)
+                            </td>
+                            <td>(@item.X , @item.Y)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </p>
+    </div>
+}
