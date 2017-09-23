@@ -97,6 +97,7 @@ namespace RTTicTacToe.WebApp.Controllers
             var cmd = new MakeMovement
             {
                 Id = _currentGameId.Value,
+                MovementId = Guid.NewGuid(),
                 PlayerId = playerId,
                 X = x,
                 Y = y
