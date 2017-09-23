@@ -35,8 +35,8 @@ namespace RTTicTacToe.CQRS.Tests
                 }),
                 Then(new GameCreated
                 {
-                    GameId = game1Id,
-                    GameName = game1Name
+                    Id = game1Id,
+                    Name = game1Name
                 }));
         }
 
@@ -47,15 +47,17 @@ namespace RTTicTacToe.CQRS.Tests
                 Given(),
                 When(new RegisterPlayer
                 {
-                    Id = player1Id,
-                    Name = player1Name,
-                    GameId = game1Id
+                    Id = game1Id,
+                    PlayerName = player1Name,
+                    PlayerId = player1Id,
+                    PlayerNumber = 1
                 }),
                 Then(new PlayerRegistered
                 {
+                    Id = game1Id,
                     PlayerId = player1Id,
                     PlayerName = player1Name,
-                    GameId = game1Id
+                    PlayerNumber = 1
                 }));
         }
     }
