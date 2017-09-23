@@ -2,6 +2,7 @@
 using RTTicTacToe.CQRS;
 using RTTicTacToe.Events;
 using RTTicTacToe.Exceptions;
+using RTTicTacToe.Utilities;
 using System;
 using System.Collections;
 
@@ -18,6 +19,7 @@ namespace RTTicTacToe.Aggregates
         #region Fields
 
         private bool _gameStarted;
+        private bool _gameFinished;
         private int[,] _gameBoard = new int[3, 3];
 
         private Guid _gameId = Guid.Empty;
@@ -41,7 +43,6 @@ namespace RTTicTacToe.Aggregates
                 throw new GameAlreadyExistsException();
             }
 
-
             yield return new GameCreated
             {
                 Id = c.Id,
@@ -51,6 +52,11 @@ namespace RTTicTacToe.Aggregates
 
         public IEnumerable Handle(RegisterPlayer c)
         {
+            if (_gameFinished)
+            {
+                throw new GameAlreadyFinishedException();
+            }
+
             if (_gameStarted)
             {
                 throw new GameAlreadyStartedException();
@@ -107,9 +113,19 @@ namespace RTTicTacToe.Aggregates
                 throw new GameNotStartedException();
             }
 
+            if (_gameFinished)
+            {
+                throw new GameAlreadyFinishedException();
+            }
+
             if (_player1Id != m.PlayerId && _player2Id != m.PlayerId)
             {
                 throw new MovementInvalidPlayerIdException();
+            }
+
+            if (m.MovementId == Guid.Empty)
+            {
+                throw new MovementWithNoIdException();
             }
 
             if (m.X < 0 ||
@@ -125,16 +141,16 @@ namespace RTTicTacToe.Aggregates
                 throw new MovementAlreadyTakenException();
             }
 
-            if (_playersTurn != 1) //Handle a play for player 1
+            if (_playersTurn == 1) //Handle a play for player 1
             {
-                if (_player1Id == m.PlayerId)
+                if (_player1Id != m.PlayerId)
                 {
                     throw new MovementWrongPlayerException();
                 }
             }
-            else if (_playersTurn != 2) //Handle a play for player 2
+            else if (_playersTurn == 2) //Handle a play for player 2
             {
-                if (_player2Id == m.PlayerId)
+                if (_player2Id != m.PlayerId)
                 {
                     throw new MovementWrongPlayerException();
                 }
@@ -143,6 +159,7 @@ namespace RTTicTacToe.Aggregates
             yield return new MovementMade
             {
                 Id = m.Id,
+                MovementId = m.MovementId,
                 PlayerId = m.PlayerId,
                 X = m.X,
                 Y = m.Y
@@ -178,13 +195,18 @@ namespace RTTicTacToe.Aggregates
 
         public void Apply(MovementMade e)
         {
-            if (_playersTurn != 1) //Handle a play for player 1
+            if (_playersTurn == 1) //Handle a play for player 1
             {
+                if (_player1Id != e.PlayerId)
+                {
+                    throw new MovementWrongPlayerException();
+                }
+
                 _gameBoard[e.X, e.Y] = 1;
             }
-            else if (_playersTurn != 2) //Handle a play for player 2
+            else if (_playersTurn == 2) //Handle a play for player 2
             {
-                if (_player2Id == e.PlayerId)
+                if (_player2Id != e.PlayerId)
                 {
                     throw new MovementWrongPlayerException();
                 }
@@ -192,9 +214,17 @@ namespace RTTicTacToe.Aggregates
                 _gameBoard[e.X, e.Y] = 2;
             }
 
-            _playersTurn = (_playersTurn == 1) ? 2 : 1;
+            if (GameHelper.CheckGameFinished(_gameBoard))
+            {
+                _gameFinished = true;
+            }
+            else
+            {
+                _playersTurn = (_playersTurn == 1) ? 2 : 1;
+            }
         }
 
+        
         #endregion
     }
 }

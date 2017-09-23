@@ -1,6 +1,7 @@
 ﻿using RTTicTacToe.CQRS;
 using RTTicTacToe.Events;
 using RTTicTacToe.Queries.Models;
+using RTTicTacToe.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -92,12 +93,17 @@ namespace RTTicTacToe.Queries
             var game = GetGame(e.Id);
             lock (game)
             {
-                game.Movements.Add(new Movement
+                game.Movements.Add(new Movement(e.MovementId)
                 {
                     PlayerId = e.PlayerId,
                     X = e.X,
                     Y = e.Y
                 });
+
+                if(GameHelper.CheckGameFinished(game))
+                {
+                    game.Winner = (game.Player1.Id == e.PlayerId ? game.Player1 : game.Player2);
+                }
             }
         }
 
