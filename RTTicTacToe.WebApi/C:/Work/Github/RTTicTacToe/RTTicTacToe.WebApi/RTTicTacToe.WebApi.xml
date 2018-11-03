@@ -1,0 +1,191 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>RTTicTacToe.WebApi</name>
+    </assembly>
+    <members>
+        <member name="T:RTTicTacToe.WebApi.Controllers.GameController">
+            <summary>
+            
+            </summary>
+            <seealso cref="T:Microsoft.AspNetCore.Mvc.ControllerBase" />
+        </member>
+        <member name="M:RTTicTacToe.WebApi.Controllers.GameController.#ctor(CQRSlite.Commands.ICommandSender,RTTicTacToe.CQRS.ReadModel.Queries.IGameQueries)">
+            <summary>
+            Initializes a new instance of the <see cref="T:RTTicTacToe.WebApi.Controllers.GameController"/> class.
+            </summary>
+            <param name="commandSender">Command sender.</param>
+            <param name="readModel">Read model.</param>
+        </member>
+        <member name="M:RTTicTacToe.WebApi.Controllers.GameController.GetAllGames">
+            <summary>
+            Gets all games.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:RTTicTacToe.WebApi.Controllers.GameController.GetGameById(System.Guid)">
+            <summary>
+            Gets the game by identifier.
+            </summary>
+            <param name="id">The identifier.</param>
+            <returns></returns>
+        </member>
+        <member name="M:RTTicTacToe.WebApi.Controllers.GameController.CreateNewGame(System.String)">
+            <summary>
+            Creates a new game.
+            </summary>
+            <param name="name">The name.</param>
+            <returns></returns>
+        </member>
+        <member name="M:RTTicTacToe.WebApi.Controllers.GameController.AddPlayerToGame(System.Guid,RTTicTacToe.WebApi.Models.AddPlayerModel)">
+            <summary>
+            Adds a player to a game.
+            </summary>
+            <param name="id">The game identifier.</param>
+            <param name="model">The add player model.</param>
+            <returns></returns>
+        </member>
+        <member name="M:RTTicTacToe.WebApi.Controllers.GameController.MakeMovement(System.Guid,RTTicTacToe.WebApi.Models.MakeMovementModel)">
+            <summary>
+            Makes a movement.
+            </summary>
+            <param name="id">The game identifier.</param>
+            <param name="model">The make movement model.</param>
+            <returns></returns>
+        </member>
+        <member name="T:RTTicTacToe.WebApi.Models.AddPlayerModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:RTTicTacToe.WebApi.Models.AddPlayerModel.Version">
+            <summary>
+            Gets or sets the version.
+            </summary>
+            <value>
+            The version.
+            </value>
+        </member>
+        <member name="P:RTTicTacToe.WebApi.Models.AddPlayerModel.PlayerId">
+            <summary>
+            Gets or sets the player identifier.
+            </summary>
+            <value>
+            The player identifier.
+            </value>
+        </member>
+        <member name="P:RTTicTacToe.WebApi.Models.AddPlayerModel.PlayerName">
+            <summary>
+            Gets or sets the player's name.
+            </summary>
+            <value>
+            The name.
+            </value>
+        </member>
+        <member name="T:RTTicTacToe.WebApi.Models.MakeMovementModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:RTTicTacToe.WebApi.Models.MakeMovementModel.Version">
+            <summary>
+            Gets or sets the version.
+            </summary>
+            <value>
+            The version.
+            </value>
+        </member>
+        <member name="P:RTTicTacToe.WebApi.Models.MakeMovementModel.PlayerId">
+            <summary>
+            Gets or sets the player identifier.
+            </summary>
+            <value>
+            The player identifier.
+            </value>
+        </member>
+        <member name="P:RTTicTacToe.WebApi.Models.MakeMovementModel.X">
+            <summary>
+            Gets or sets the x.
+            </summary>
+            <value>
+            The x.
+            </value>
+        </member>
+        <member name="P:RTTicTacToe.WebApi.Models.MakeMovementModel.Y">
+            <summary>
+            Gets or sets the y.
+            </summary>
+            <value>
+            The y.
+            </value>
+        </member>
+        <member name="T:RTTicTacToe.WebApi.Program">
+            <summary>
+            Program.
+            </summary>
+        </member>
+        <member name="M:RTTicTacToe.WebApi.Program.Main(System.String[])">
+            <summary>
+            The entry point of the program, where the program control starts and ends.
+            </summary>
+            <param name="args">The command-line arguments.</param>
+        </member>
+        <member name="M:RTTicTacToe.WebApi.Program.CreateWebHostBuilder(System.String[])">
+            <summary>
+            Creates the web host builder.
+            </summary>
+            <returns>The web host builder.</returns>
+            <param name="args">Arguments.</param>
+        </member>
+        <member name="T:RTTicTacToe.WebApi.Startup">
+            <summary>
+            Startup.
+            </summary>
+        </member>
+        <member name="M:RTTicTacToe.WebApi.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Initializes a new instance of the <see cref="T:RTTicTacToe.WebApi.Startup"/> class.
+            </summary>
+            <param name="configuration">Configuration.</param>
+        </member>
+        <member name="P:RTTicTacToe.WebApi.Startup.Configuration">
+            <summary>
+            Gets the configuration.
+            </summary>
+            <value>The configuration.</value>
+        </member>
+        <member name="M:RTTicTacToe.WebApi.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Configures the services.
+            This method gets called by the runtime. Use this method to add services to the container.
+            </summary>
+            <param name="services">Services.</param>
+        </member>
+        <member name="M:RTTicTacToe.WebApi.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IHostingEnvironment)">
+            <summary>
+            Configure the specified app and env.
+            This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            </summary>
+            <param name="app">App.</param>
+            <param name="env">Env.</param>
+        </member>
+        <member name="T:RTTicTacToe.WebApi.Provider">
+            <summary>
+            Provider that makes scoped services work inside router.
+            </summary>
+        </member>
+        <member name="M:RTTicTacToe.WebApi.Provider.#ctor(Microsoft.Extensions.DependencyInjection.ServiceProvider)">
+            <summary>
+            Initializes a new instance of the <see cref="T:RTTicTacToe.WebApi.Provider"/> class.
+            </summary>
+            <param name="serviceProvider">Service provider.</param>
+        </member>
+        <member name="M:RTTicTacToe.WebApi.Provider.GetService(System.Type)">
+            <summary>
+            Gets the service.
+            </summary>
+            <returns>The service.</returns>
+            <param name="serviceType">Service type.</param>
+        </member>
+    </members>
+</doc>

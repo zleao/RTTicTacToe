@@ -22,6 +22,11 @@ namespace RTTicTacToe.WebApi.Controllers
         private readonly ICommandSender _commandSender;
         private readonly IGameQueries _readModel;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:RTTicTacToe.WebApi.Controllers.GameController"/> class.
+        /// </summary>
+        /// <param name="commandSender">Command sender.</param>
+        /// <param name="readModel">Read model.</param>
         public GameController(ICommandSender commandSender, IGameQueries readModel)
         {
             _readModel = readModel;
@@ -60,7 +65,6 @@ namespace RTTicTacToe.WebApi.Controllers
         /// Creates a new game.
         /// </summary>
         /// <param name="name">The name.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(200)]

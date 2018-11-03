@@ -21,16 +21,31 @@ using RTTicTacToe.CQRS.WriteModel.Handlers;
 
 namespace RTTicTacToe.WebApi
 {
+    /// <summary>
+    /// Startup.
+    /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:RTTicTacToe.WebApi.Startup"/> class.
+        /// </summary>
+        /// <param name="configuration">Configuration.</param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
+        /// <summary>
+        /// Gets the configuration.
+        /// </summary>
+        /// <value>The configuration.</value>
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// Configures the services.
+        /// This method gets called by the runtime. Use this method to add services to the container.
+        /// </summary>
+        /// <param name="services">Services.</param>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMemoryCache();
@@ -71,7 +86,12 @@ namespace RTTicTacToe.WebApi
             registrar.RegisterInAssemblyOf(typeof(GameCommandHandlers));
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// Configure the specified app and env.
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app">App.</param>
+        /// <param name="env">Env.</param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -92,18 +112,30 @@ namespace RTTicTacToe.WebApi
         }
     }
 
-    //This makes scoped services work inside router.
+    //
+    /// <summary>
+    /// Provider that makes scoped services work inside router.
+    /// </summary>
     public class Provider : IServiceProvider
     {
         private readonly ServiceProvider _serviceProvider;
         private readonly IHttpContextAccessor _contextAccessor;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:RTTicTacToe.WebApi.Provider"/> class.
+        /// </summary>
+        /// <param name="serviceProvider">Service provider.</param>
         public Provider(ServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
             _contextAccessor = _serviceProvider.GetService<IHttpContextAccessor>();
         }
 
+        /// <summary>
+        /// Gets the service.
+        /// </summary>
+        /// <returns>The service.</returns>
+        /// <param name="serviceType">Service type.</param>
         public object GetService(Type serviceType)
         {
             return _contextAccessor?.HttpContext?.RequestServices.GetService(serviceType) ??
