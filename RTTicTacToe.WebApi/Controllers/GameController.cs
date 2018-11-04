@@ -90,14 +90,14 @@ namespace RTTicTacToe.WebApi.Controllers
             } 
         }
 
-        //POST api/game/<id>                      
+        //POST api/game/<id>/player                     
         /// <summary>
         /// Adds a player to a game.
         /// </summary>
         /// <param name="id">The game identifier.</param>
         /// <param name="model">The add player model.</param>
         /// <returns></returns>
-        [HttpPost("{id}")]
+        [HttpPost("{id}/player")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> AddPlayerToGame([FromRoute]Guid id, [FromBody]AddPlayerModel model)
