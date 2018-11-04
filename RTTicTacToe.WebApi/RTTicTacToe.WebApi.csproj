@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RTTicTacToe.CQRS\RTTicTacToe.CQRS.csproj" />
+    <ProjectReference Include="..\RTTicTacToe.WebApi.Models\RTTicTacToe.WebApi.Models.csproj" />
   </ItemGroup>
 
 </Project>
