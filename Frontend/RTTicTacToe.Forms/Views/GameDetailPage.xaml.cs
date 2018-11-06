@@ -9,6 +9,11 @@ namespace RTTicTacToe.Forms.Views
     {
         readonly GameDetailViewModel _viewModel;
 
+        public GameDetailPage()
+            : this(null)
+        {
+
+        }
         public GameDetailPage(GameDetailViewModel viewModel)
         {
             InitializeComponent();

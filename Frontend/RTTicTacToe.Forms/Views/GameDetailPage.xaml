@@ -4,10 +4,26 @@
              x:Class="RTTicTacToe.Forms.Views.GameDetailPage" 
              Title="{Binding Title}">
     <StackLayout Spacing="20" Padding="15">
-        <!--<Label Text="Text:" FontSize="Medium" />
-        <Label Text="{Binding Item.Text}" FontSize="Small" />
-        <Label Text="Description:" FontSize="Medium" />
-        <Label Text="{Binding Item.Description}" FontSize="Small" />-->
-        <Label Text="Game Details" />
+        <StackLayout Orientation="Horizontal">
+            <Label Text="ID:" FontSize="Medium" />
+            <Label Text="{Binding GameId}" FontSize="Small" />
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Version:" FontSize="Medium" VerticalTextAlignment="Center" />
+            <Label Text="{Binding Version}" FontSize="Small" VerticalTextAlignment="Center" />
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Player 1:" FontSize="Medium" />
+            <Label Text="{Binding Player1?.Name}" FontSize="Small" />
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Player 2:" FontSize="Medium" />
+            <Label Text="{Binding Player2?.Name}" FontSize="Small" />
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Winner:" FontSize="Medium" />
+            <Label Text="{Binding Winner?.Name}" FontSize="Small" />
+        </StackLayout>
+        
     </StackLayout>
 </ContentPage>
