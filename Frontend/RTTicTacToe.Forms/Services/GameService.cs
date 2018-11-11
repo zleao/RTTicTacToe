@@ -103,5 +103,10 @@ namespace RTTicTacToe.Forms.Services
 
             return response.IsSuccessStatusCode;
         }
+
+        public bool IsValidPlayer(Player player)
+        {
+            return player != null && player.Id != Guid.Empty && !string.IsNullOrEmpty(player.Name);
+        }
     }
 }

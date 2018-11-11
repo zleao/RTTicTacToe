@@ -11,6 +11,7 @@
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>
+            <Label HorizontalTextAlignment="Center" Text="{Binding CurrentPlayer.Name}"/>
             <ListView x:Name="GamesListView" 
                       ItemsSource="{Binding Games}"
                       VerticalOptions="FillAndExpand" 
@@ -22,7 +23,7 @@
                       ItemSelected="OnItemSelected">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextCell Text="{Binding Name}" />
+                        <TextCell Text="{Binding GameName}" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
                 <ListView.Footer>

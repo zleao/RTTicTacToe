@@ -12,5 +12,7 @@ namespace RTTicTacToe.Forms.Services
         Task<Game> GetGameAsync(Guid id);
         Task<bool> AddPlayerAsync(Guid gameId, int gameVersion, Guid playerId, string playerName);
         Task<bool> MakeMovement(Guid gameId, int gameVersion, Guid playerId, short x, short y);
+
+        bool IsValidPlayer(Player player);
     }
 }

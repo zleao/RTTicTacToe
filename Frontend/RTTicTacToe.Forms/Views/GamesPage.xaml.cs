@@ -20,24 +20,29 @@ namespace RTTicTacToe.Forms.Views
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
         {
-            if (!(args.SelectedItem is Game game))
+            if (!(args.SelectedItem is GameDetailViewModel gameVM))
             {
                 return;
             }
 
-            await Navigation.PushAsync(new GameDetailPage(new GameDetailViewModel(game)));
+            await Navigation.PushAsync(new GameDetailPage(gameVM));
 
             // Manually deselect item.
 
             GamesListView.SelectedItem = null;
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
 
-            if (viewModel.Games.Count == 0)
-                viewModel.LoadGamesCommand.Execute(null);
+            if(await viewModel.EnsurePlayerIsCreatedAsync())
+            {
+                if (viewModel.Games.Count == 0)
+                {
+                    viewModel.LoadGamesCommand.Execute(null);
+                }
+            }
         }
     }
 }

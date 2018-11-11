@@ -54,7 +54,7 @@
                             <FormattedString.Spans>
                                 <Span Text="It shares code with its" />
                                 <Span Text=" " />
-                                <Span Text="iOS, Android" FontAttributes="Bold" />
+                                <Span Text="iOS and Android" FontAttributes="Bold" />
                                 <Span Text=" " />
                                 <Span Text="versions." />
                             </FormattedString.Spans>

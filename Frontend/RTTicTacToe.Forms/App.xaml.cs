@@ -1,4 +1,5 @@
-﻿using RTTicTacToe.Forms.Services;
+﻿using System;
+using RTTicTacToe.Forms.Services;
 using RTTicTacToe.Forms.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -14,7 +15,7 @@ namespace RTTicTacToe.Forms
         {
             InitializeComponent();
 
-            DependencyService.Register<IGameService,GameService>();
+            RegisterClasses();
 
             MainPage = new MainPage();
         }
@@ -32,6 +33,12 @@ namespace RTTicTacToe.Forms
         protected override void OnResume()
         {
             // Handle when your app resumes
+        }
+
+        private void RegisterClasses()
+        {
+            DependencyService.Register<IGameService, GameService>();
+            DependencyService.Register<ILocalStorageService, LocalStorageService>();
         }
     }
 }

@@ -10,6 +10,7 @@ namespace RTTicTacToe.Forms.ViewModels
     public class BaseViewModel : INotifyPropertyChanged
     {
         public IGameService GameService => DependencyService.Get<IGameService>();
+        public ILocalStorageService LocalStorageService => DependencyService.Get<ILocalStorageService>();
 
         bool isBusy = false;
         public bool IsBusy
