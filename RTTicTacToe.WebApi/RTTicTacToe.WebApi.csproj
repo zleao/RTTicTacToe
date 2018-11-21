@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>C:\Work\Github\RTTicTacToe\RTTicTacToe.WebApi\RTTicTacToe.WebApi.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\netcoreapp2.1\C:\Work\Github\RTTicTacToe\RTTicTacToe.WebApi\RTTicTacToe.WebApi.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,11 +19,13 @@
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="NSwag.AspNetCore" Version="11.20.1" />
     <PackageReference Include="Scrutor" Version="3.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\RTTicTacToe.CQRS\RTTicTacToe.CQRS.csproj" />
     <ProjectReference Include="..\RTTicTacToe.WebApi.Models\RTTicTacToe.WebApi.Models.csproj" />
+    <ProjectReference Include="..\RTTicTacToe.CQRS.Database\RTTicTacToe.CQRS.Database.csproj" />
   </ItemGroup>
 
 </Project>

@@ -9,6 +9,21 @@ namespace RTTicTacToe.CQRS.ReadModel.Queries
 {
     public class GameQueries : IGameQueries
     {
+        #region Fields
+
+        private readonly IDatabaseService databaseService;
+
+        #endregion
+
+        #region Constructor
+
+        public GameQueries(IDatabaseService databaseService)
+        {
+            this.databaseService = databaseService;
+        }
+
+        #endregion
+
         #region Queries
 
         public List<GameDto> GetAllGames()

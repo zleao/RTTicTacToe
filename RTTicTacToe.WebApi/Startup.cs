@@ -11,10 +11,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NJsonSchema;
 using NSwag.AspNetCore;
+using RTTicTacToe.CQRS.Database;
+using RTTicTacToe.CQRS.ReadModel.Infrastructure;
 using RTTicTacToe.CQRS.ReadModel.Queries;
 using RTTicTacToe.CQRS.WriteModel.EventStore;
 using RTTicTacToe.CQRS.WriteModel.Handlers;
@@ -60,6 +63,9 @@ namespace RTTicTacToe.WebApi
             services.AddScoped<IRepository>(y => new CacheRepository(new Repository(y.GetService<IEventStore>()), y.GetService<IEventStore>(), y.GetService<ICache>()));
             services.AddScoped<CQRSlite.Domain.ISession, Session>();
 
+            services.AddDbContext<DatabaseContext>(options => options.UseSqlite("Data Source=CQRSGame.db"));
+
+            services.AddTransient<IDatabaseService>(sp => new DatabaseService(sp.GetRequiredService<DatabaseContext>()));
             services.AddTransient<IGameQueries, GameQueries>();
 
             //Scan for commandhandlers and eventhandlers
@@ -97,7 +103,6 @@ namespace RTTicTacToe.WebApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
             }
             
             app.UseStaticFiles();

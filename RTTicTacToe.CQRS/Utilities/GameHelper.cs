@@ -6,11 +6,6 @@ namespace RTTicTacToe.CQRS.Utilities
 {
     public static class GameHelper
     {
-        public static GameDto GetGame(Guid id)
-        {
-            return InMemoryDatabase.AllGames[id];
-        }
-
         public static bool CheckGameFinished(GameDto game)
         {
             int[,] gameBoard = new int[3, 3];

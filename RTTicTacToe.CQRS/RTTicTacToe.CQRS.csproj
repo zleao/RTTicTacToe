@@ -10,4 +10,10 @@
     <PackageReference Include="System.Collections.NonGeneric" Version="4.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="ReadModel\Infrastructure\InMemoryDatabase.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RTTicTacToe.CQRS.Database\RTTicTacToe.CQRS.Database.csproj" />
+  </ItemGroup>
 </Project>

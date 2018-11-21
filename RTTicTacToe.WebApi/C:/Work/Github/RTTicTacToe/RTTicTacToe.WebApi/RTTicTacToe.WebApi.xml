@@ -10,7 +10,7 @@
             </summary>
             <seealso cref="T:Microsoft.AspNetCore.Mvc.ControllerBase" />
         </member>
-        <member name="M:RTTicTacToe.WebApi.Controllers.GameController.#ctor(CQRSlite.Commands.ICommandSender,RTTicTacToe.CQRS.ReadModel.Queries.IGameQueries)">
+        <member name="M:RTTicTacToe.WebApi.Controllers.GameController.#ctor(CQRSlite.Commands.ICommandSender,RTTicTacToe.CQRS.ReadModel.Queries.IGameQueries,Microsoft.AspNetCore.Hosting.IHostingEnvironment)">
             <summary>
             Initializes a new instance of the <see cref="T:RTTicTacToe.WebApi.Controllers.GameController"/> class.
             </summary>

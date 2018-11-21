@@ -33,6 +33,16 @@ namespace RTTicTacToe.WebApi.Controllers
             _commandSender = commandSender;
         }
 
+        /// <summary>
+        /// About this instance.
+        /// </summary>
+        /// <returns>The about.</returns>
+        [HttpGet("about")]
+        public ActionResult About()
+        {
+            return Content("RTTicTacToe.WebApi v1.0.0");
+        }
+
         // GET api/game
         /// <summary>
         /// Gets all games.
@@ -41,9 +51,9 @@ namespace RTTicTacToe.WebApi.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<GameDto>), 200)]
         [ProducesResponseType(400)]
-        public ActionResult<IEnumerable<GameDto>> GetAllGames()
+        public async Task<ActionResult<IEnumerable<GameDto>>> GetAllGames()
         {
-            return _readModel.GetAllGames();
+            return Ok(await _readModel.GetAllGamesAsync());
         }
 
         // GET api/game/<id>        
@@ -55,9 +65,9 @@ namespace RTTicTacToe.WebApi.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(GameDto), 200)]
         [ProducesResponseType(400)]
-        public ActionResult<GameDto> GetGameById(Guid id)
+        public async Task<ActionResult<GameDto>> GetGameById(Guid id)
         {
-            return _readModel.GetGameById(id);
+            return Ok(await _readModel.GetGameByIdAsync(id));
         }
 
         //POST api/game        

@@ -9,19 +9,24 @@ using RTTicTacToe.CQRS.Utilities;
 namespace RTTicTacToe.CQRS.ReadModel.Handlers
 {
     public class GameView : ICancellableEventHandler<GameCreated>,
-        ICancellableEventHandler<PlayerRegistered>,
-        ICancellableEventHandler<MovementMade>
+                            ICancellableEventHandler<PlayerRegistered>,
+                            ICancellableEventHandler<MovementMade>
     {
-        public Task Handle(GameCreated message, CancellationToken token = new CancellationToken())
+        private readonly IDatabaseService _databaseService;
+
+        public GameView(IDatabaseService databaseService)
         {
-            InMemoryDatabase.AllGames.Add(message.Id, new GameDto(message.Id, message.Name, message.Version));
-            return Task.CompletedTask;
-            
+            this._databaseService = databaseService;
         }
 
-        public Task Handle(PlayerRegistered message, CancellationToken token = new CancellationToken())
+        public Task Handle(GameCreated message, CancellationToken token = new CancellationToken())
         {
-            var game = GameHelper.GetGame(message.Id);
+            return _databaseService.AddGameAsync(new GameDto(message.Id, message.Name, message.Version));
+        }
+
+        public async Task Handle(PlayerRegistered message, CancellationToken token = new CancellationToken())
+        {
+            var game = await _databaseService.GetGameByIdAsync(message.Id);
             lock (game)
             {
                 game.Version = message.Version;
@@ -36,13 +41,11 @@ namespace RTTicTacToe.CQRS.ReadModel.Handlers
                     game.Player2 = newPlayer;
                 }
             }
-
-            return Task.CompletedTask;
         }
 
-        public Task Handle(MovementMade message, CancellationToken token = new CancellationToken())
+        public async Task Handle(MovementMade message, CancellationToken token = new CancellationToken())
         {
-            var game = GameHelper.GetGame(message.Id);
+            var game = await _databaseService.GetGameByIdAsync(message.Id);
             lock (game)
             {
                 game.Version = message.Version;
@@ -53,8 +56,6 @@ namespace RTTicTacToe.CQRS.ReadModel.Handlers
                     game.Winner = (game.Player1.Id == message.PlayerId ? game.Player1 : game.Player2);
                 }
             }
-
-            return  Task.CompletedTask;
         }
     }
 }
