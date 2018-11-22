@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using RTTicTacToe.CQRS.ReadModel.Dtos;
 using RTTicTacToe.CQRS.ReadModel.Infrastructure;
-using RTTicTacToe.CQRS.Utilities;
 
 namespace RTTicTacToe.CQRS.ReadModel.Queries
 {
@@ -11,7 +10,7 @@ namespace RTTicTacToe.CQRS.ReadModel.Queries
     {
         #region Fields
 
-        private readonly IDatabaseService databaseService;
+        private readonly IDatabaseService _databaseService;
 
         #endregion
 
@@ -19,38 +18,36 @@ namespace RTTicTacToe.CQRS.ReadModel.Queries
 
         public GameQueries(IDatabaseService databaseService)
         {
-            this.databaseService = databaseService;
+            _databaseService = databaseService;
         }
 
         #endregion
 
         #region Queries
 
-        public List<GameDto> GetAllGames()
+        public Task<IList<GameDto>> GetAllGamesAsync()
         {
-            return InMemoryDatabase.AllGames.Values.ToList();
+            return _databaseService.GetAllGamesAsync();
+        }
+     
+        public Task<GameDto> GetGameByIdAsync(Guid id)
+        {
+            return _databaseService.GetGameByIdAsync(id);
         }
 
-        public GameDto GetGameById(Guid id)
+        public Task<IList<GameDto>> GetGamesOfPlayerAsync(Guid playerId)
         {
-            return GameHelper.GetGame(id);
+            return _databaseService.GetGamesByPlayerIdAsync(playerId);
         }
 
-        public List<GameDto> GetGamesOfPlayer(Guid playerId)
+        public async Task<IList<MovementDto>> GetMovementsFromGameAsync(Guid gameId)
         {
-            return InMemoryDatabase.AllGames.Select(v => v.Value)
-                .Where(g => g.Player1?.Id == playerId || g.Player2?.Id == playerId)
-                .ToList();
+            return (await _databaseService.GetGameByIdAsync(gameId)).Movements;
         }
 
-        public List<MovementDto> GetMovementsFromGame(Guid gameId)
+        public async Task<IList<PlayerDto>> GetPlayersFromGameAsync(Guid gameId)
         {
-            return GameHelper.GetGame(gameId).Movements;
-        }
-
-        public List<PlayerDto> GetPlayersFromGame(Guid gameId)
-        {
-            var game = GameHelper.GetGame(gameId);
+            var game = await _databaseService.GetGameByIdAsync(gameId);
             lock (game)
             {
                 return new List<PlayerDto> { game.Player1, game.Player2 };

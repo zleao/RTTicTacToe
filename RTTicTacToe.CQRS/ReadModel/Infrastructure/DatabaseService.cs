@@ -1,34 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using RTTicTacToe.CQRS.Database;
 using RTTicTacToe.CQRS.ReadModel.Dtos;
 
 namespace RTTicTacToe.CQRS.ReadModel.Infrastructure
 {
     public class DatabaseService : IDatabaseService
     {
-        public DatabaseService()
+        private readonly DatabaseContext _databaseContext;
+
+        public DatabaseService(DatabaseContext databaseContext)
         {
+            _databaseContext = databaseContext;
         }
 
-        public Task AddGameAsync(GameDto game)
+        public async Task AddGameAsync(GameDto game)
         {
-            throw new NotImplementedException();
+            await _databaseContext.Game.AddAsync(new Database.Models.Game
+            {
+                Id = game.Id,
+                Name = game.Name,
+                Version = game.Version,
+                CreationDate = DateTime.Now.Date,
+                LastChangeDate = DateTime.Now.Date
+            });
+
+            await _databaseContext.SaveChangesAsync();
         }
 
-        public Task<IList<GameDto>> GetAllGamesAsync()
+        public async Task<IList<GameDto>> GetAllGamesAsync()
         {
-            throw new NotImplementedException();
+            return await _databaseContext.Game.Select(g => new GameDto(g.Id, g.Name, g.Version)).ToListAsync();
         }
 
-        public Task<GameDto> GetGameByIdAsync(Guid id)
+        public async Task<GameDto> GetGameByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var game = await _databaseContext.Game.FindAsync(id);
+            if(game != null)
+            {
+                return new GameDto(game.Id, game.Name, game.Version);    
+            }
+
+            return null;
         }
 
-        public Task<GameDto> GetGamesByPlayerIdAsync(Guid playerId)
+        public Task<IList<GameDto>> GetGamesByPlayerIdAsync(Guid playerId)
         {
-            throw new NotImplementedException();
+            return GetAllGamesAsync();
         }
     }
 }

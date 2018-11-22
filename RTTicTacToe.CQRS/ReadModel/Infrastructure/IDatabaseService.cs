@@ -9,7 +9,7 @@ namespace RTTicTacToe.CQRS.ReadModel.Infrastructure
     {
         Task<IList<GameDto>> GetAllGamesAsync();
         Task<GameDto> GetGameByIdAsync(Guid id);
-        Task<GameDto> GetGamesByPlayerIdAsync(Guid playerId);
+        Task<IList<GameDto>> GetGamesByPlayerIdAsync(Guid playerId);
         Task AddGameAsync(GameDto game);
     }
 }
