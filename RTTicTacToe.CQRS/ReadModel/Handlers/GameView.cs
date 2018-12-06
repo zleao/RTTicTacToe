@@ -21,40 +21,34 @@ namespace RTTicTacToe.CQRS.ReadModel.Handlers
 
         public Task Handle(GameCreated message, CancellationToken token = new CancellationToken())
         {
-            return _databaseService.AddGameAsync(new GameDto(message.Id, message.Name, message.Version));
+            return _databaseService.AddNewGameAsync(message.Id, message.Name, message.Version);
         }
 
         public async Task Handle(PlayerRegistered message, CancellationToken token = new CancellationToken())
         {
-            var game = await _databaseService.GetGameByIdAsync(message.Id);
-            lock (game)
-            {
-                game.Version = message.Version;
-                var newPlayer = new PlayerDto(message.PlayerId, message.PlayerName);
+            var newPlayer = new PlayerDto(message.PlayerId, message.PlayerName);
 
-                if (message.PlayerNumber == 1)
-                {
-                    game.Player1 = newPlayer;
-                }
-                else if (message.PlayerNumber == 2)
-                {
-                    game.Player2 = newPlayer;
-                }
+            if (message.PlayerNumber == 1)
+            {
+                await _databaseService.UpdatePlayer1Async(message.Id, message.Version, newPlayer);
+            }
+            else if (message.PlayerNumber == 2)
+            {
+                await _databaseService.UpdatePlayer2Async(message.Id, message.Version, newPlayer);
             }
         }
 
         public async Task Handle(MovementMade message, CancellationToken token = new CancellationToken())
         {
-            var game = await _databaseService.GetGameByIdAsync(message.Id);
-            lock (game)
-            {
-                game.Version = message.Version;
-                game.Movements.Add(new MovementDto(message.MovementId, message.PlayerId, message.X, message.Y));
+            await _databaseService.UpdateGameMovementsAsync(message.Id,
+                                                            message.Version,
+                                                            new MovementDto(message.MovementId, message.PlayerId, message.X, message.Y));
 
-                if(GameHelper.CheckGameFinished(game))
-                {
-                    game.Winner = (game.Player1.Id == message.PlayerId ? game.Player1 : game.Player2);
-                }
+
+            var game = await _databaseService.GetGameByIdAsync(message.Id);
+            if (GameHelper.CheckGameFinished(game))
+            {
+                await _databaseService.UpdateWinnerAsync(message.Id, message.Version, message.PlayerId);
             }
         }
     }

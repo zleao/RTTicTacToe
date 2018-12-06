@@ -9,8 +9,10 @@ namespace RTTicTacToe.CQRS.ReadModel.Dtos
         public string Name { get; private set; }
         public PlayerDto Player1 { get; set; }
         public PlayerDto Player2 { get; set; }
-        public List<MovementDto> Movements { get; set; }
+        public IList<MovementDto> Movements { get; set; }
         public PlayerDto Winner { get; set; }
+        public DateTime CreationDate { get; set; }
+        public DateTime LastChangeDate { get; set; }
         public int Version { get; set; }
 
         public GameDto(Guid id, string name, int version)

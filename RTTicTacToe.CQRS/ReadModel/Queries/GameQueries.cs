@@ -35,23 +35,14 @@ namespace RTTicTacToe.CQRS.ReadModel.Queries
             return _databaseService.GetGameByIdAsync(id);
         }
 
-        public Task<IList<GameDto>> GetGamesOfPlayerAsync(Guid playerId)
+        public Task<IList<GameDto>> GetPlayerGamesAsync(Guid playerId)
         {
-            return _databaseService.GetGamesByPlayerIdAsync(playerId);
+            return _databaseService.GetPlayerGamesAsync(playerId);
         }
 
-        public async Task<IList<MovementDto>> GetMovementsFromGameAsync(Guid gameId)
+        public async Task<IList<MovementDto>> GetGameMovementsAsync(Guid gameId)
         {
             return (await _databaseService.GetGameByIdAsync(gameId)).Movements;
-        }
-
-        public async Task<IList<PlayerDto>> GetPlayersFromGameAsync(Guid gameId)
-        {
-            var game = await _databaseService.GetGameByIdAsync(gameId);
-            lock (game)
-            {
-                return new List<PlayerDto> { game.Player1, game.Player2 };
-            }
         }
 
         #endregion

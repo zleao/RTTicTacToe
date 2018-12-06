@@ -1,16 +1,21 @@
-﻿using System;
-using RTTicTacToe.CQRS.ReadModel.Dtos;
-using RTTicTacToe.CQRS.ReadModel.Infrastructure;
+﻿using RTTicTacToe.CQRS.ReadModel.Dtos;
 
 namespace RTTicTacToe.CQRS.Utilities
 {
     public static class GameHelper
     {
+        private const int MinMovementsToWin = 5;
+
         public static bool CheckGameFinished(GameDto game)
         {
+            if(game?.Movements == null || game.Movements.Count < MinMovementsToWin)
+            {
+                return false;
+            }
+
             int[,] gameBoard = new int[3, 3];
 
-            foreach (var mov in game.Movements)
+            foreach (var mov in game?.Movements)
             {
                 gameBoard[mov.X, mov.Y] = (mov.PlayerId == game.Player1.Id ? 1 : 2);
             }

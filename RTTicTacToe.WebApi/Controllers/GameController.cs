@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CQRSlite.Commands;
@@ -184,6 +184,20 @@ namespace RTTicTacToe.WebApi.Controllers
             {
                 return StatusCode(500, ex.Message);
             } 
+        }
+
+        // GET api/player/<id>/games        
+        /// <summary>
+        /// Gets the games where a player participated or is participating.
+        /// </summary>
+        /// <param name="playerId">The identifier of the player.</param>
+        /// <returns></returns>
+        [HttpGet("player/{playerId}/games")]
+        [ProducesResponseType(typeof(IEnumerable<GameDto>), 200)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<IEnumerable<GameDto>>> GetPlayerGames(Guid playerId)
+        {
+            return Ok(await _readModel.GetPlayerGamesAsync(playerId));
         }
     }
 }
