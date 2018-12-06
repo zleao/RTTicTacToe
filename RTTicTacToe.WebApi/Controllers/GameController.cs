@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CQRSlite.Commands;
@@ -7,6 +7,7 @@ using RTTicTacToe.CQRS.ReadModel.Dtos;
 using RTTicTacToe.CQRS.ReadModel.Queries;
 using RTTicTacToe.CQRS.WriteModel.Commands;
 using RTTicTacToe.CQRS.WriteModel.Domain.Exceptions;
+using RTTicTacToe.WebApi.Extensions;
 using RTTicTacToe.WebApi.Models;
 
 namespace RTTicTacToe.WebApi.Controllers
@@ -40,7 +41,7 @@ namespace RTTicTacToe.WebApi.Controllers
         [HttpGet("about")]
         public ActionResult About()
         {
-            return Content("RTTicTacToe.WebApi v1.0.0");
+            return Content($"RTTicTacToe.WebApi v1.0.0{Environment.NewLine}Swagger definition: http://localhost:5000/swagger");
         }
 
         // GET api/game
@@ -96,7 +97,7 @@ namespace RTTicTacToe.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, ex.ExceptionToString());
             } 
         }
 
@@ -135,7 +136,7 @@ namespace RTTicTacToe.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, ex.ExceptionToString());
             } 
         }
 
@@ -182,7 +183,7 @@ namespace RTTicTacToe.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return StatusCode(500, ex.ExceptionToString());
             } 
         }
 
