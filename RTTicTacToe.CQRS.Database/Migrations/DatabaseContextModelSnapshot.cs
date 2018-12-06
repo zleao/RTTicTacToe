@@ -16,6 +16,28 @@ namespace RTTicTacToe.CQRS.Database.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.4-rtm-31024");
 
+            modelBuilder.Entity("RTTicTacToe.CQRS.Database.Models.Event", b =>
+                {
+                    b.Property<int>("EventId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("EventType");
+
+                    b.Property<Guid>("Id");
+
+                    b.Property<string>("SerializedEvent");
+
+                    b.Property<DateTimeOffset>("TimeStamp");
+
+                    b.Property<int>("Version");
+
+                    b.HasKey("EventId");
+
+                    b.HasIndex("Id");
+
+                    b.ToTable("Events");
+                });
+
             modelBuilder.Entity("RTTicTacToe.CQRS.Database.Models.Game", b =>
                 {
                     b.Property<Guid>("Id")

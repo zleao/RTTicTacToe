@@ -9,7 +9,7 @@ using RTTicTacToe.CQRS.Database;
 namespace RTTicTacToe.CQRS.Database.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20181206082512_InitialCreate")]
+    [Migration("20181206164906_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -17,6 +17,28 @@ namespace RTTicTacToe.CQRS.Database.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.4-rtm-31024");
+
+            modelBuilder.Entity("RTTicTacToe.CQRS.Database.Models.Event", b =>
+                {
+                    b.Property<int>("EventId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("EventType");
+
+                    b.Property<Guid>("Id");
+
+                    b.Property<string>("SerializedEvent");
+
+                    b.Property<DateTimeOffset>("TimeStamp");
+
+                    b.Property<int>("Version");
+
+                    b.HasKey("EventId");
+
+                    b.HasIndex("Id");
+
+                    b.ToTable("Events");
+                });
 
             modelBuilder.Entity("RTTicTacToe.CQRS.Database.Models.Game", b =>
                 {

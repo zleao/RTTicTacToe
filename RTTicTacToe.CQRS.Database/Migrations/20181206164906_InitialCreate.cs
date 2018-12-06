@@ -8,6 +8,23 @@ namespace RTTicTacToe.CQRS.Database.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Events",
+                columns: table => new
+                {
+                    EventId = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<Guid>(nullable: false),
+                    Version = table.Column<int>(nullable: false),
+                    TimeStamp = table.Column<DateTimeOffset>(nullable: false),
+                    SerializedEvent = table.Column<string>(nullable: true),
+                    EventType = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Events", x => x.EventId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Players",
                 columns: table => new
                 {
@@ -81,6 +98,11 @@ namespace RTTicTacToe.CQRS.Database.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Events_Id",
+                table: "Events",
+                column: "Id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Games_Player1Id",
                 table: "Games",
                 column: "Player1Id");
@@ -103,6 +125,9 @@ namespace RTTicTacToe.CQRS.Database.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Events");
+
             migrationBuilder.DropTable(
                 name: "Movements");
 
