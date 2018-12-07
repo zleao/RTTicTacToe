@@ -148,7 +148,7 @@ namespace RTTicTacToe.WebApi.Controllers
         /// <param name="id">The game identifier.</param>
         /// <param name="model">The make movement model.</param>
         /// <returns></returns>
-        [HttpPost("{id}/movement")]
+        [HttpPost("{id}/movements")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> MakeMovement([FromRoute]Guid id, [FromBody]MakeMovementModel model)
