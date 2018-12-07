@@ -28,12 +28,6 @@ namespace RTTicTacToe.CQRS.WriteModel.EventStore
             var selectedList = filteredList.Select(e => JsonConvert.DeserializeObject(e.SerializedEvent, Type.GetType(e.EventType)) as IEvent).ToList();
 
             return selectedList;
-
-
-            //return await _databaseContext.Events.AsNoTracking()
-            //.Where(e => e.Id == aggregateId && e.Version > fromVersion)
-            //.Select(e => JsonConvert.DeserializeObject(e.SerializedEvent, Type.GetType(e.EventType)) as IEvent)
-            //.ToListAsync(cancellationToken);
         }
 
         public async Task Save(IEnumerable<IEvent> events, CancellationToken cancellationToken = default(CancellationToken))

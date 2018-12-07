@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using CQRSlite.Events;
+using Newtonsoft.Json;
 using RTTicTacToe.CQRS.ReadModel.Dtos;
 using RTTicTacToe.CQRS.ReadModel.Infrastructure;
 
@@ -11,14 +14,16 @@ namespace RTTicTacToe.CQRS.ReadModel.Queries
         #region Fields
 
         private readonly IDatabaseService _databaseService;
+        private readonly IEventStore _eventStore;
 
         #endregion
 
         #region Constructor
 
-        public GameQueries(IDatabaseService databaseService)
+        public GameQueries(IDatabaseService databaseService, IEventStore eventStore)
         {
             _databaseService = databaseService;
+            _eventStore = eventStore;
         }
 
         #endregion
@@ -43,6 +48,19 @@ namespace RTTicTacToe.CQRS.ReadModel.Queries
         public async Task<IList<MovementDto>> GetGameMovementsAsync(Guid gameId)
         {
             return (await _databaseService.GetGameByIdAsync(gameId)).Movements;
+        }
+
+        public async Task<IList<EventDto>> GetGameEventsAsync(Guid gameId)
+        {
+            var events = await _eventStore.Get(gameId, 0);
+            return events.Select(e => new EventDto
+            {
+                Id = e.Id,
+                Version = e.Version,
+                TimeStamp = e.TimeStamp,
+                EventType = e.GetType().FullName,
+                SerializedEvent = JsonConvert.SerializeObject(e)
+            }).ToList();
         }
 
         #endregion

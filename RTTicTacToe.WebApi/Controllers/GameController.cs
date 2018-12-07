@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CQRSlite.Commands;
+using CQRSlite.Events;
 using Microsoft.AspNetCore.Mvc;
 using RTTicTacToe.CQRS.ReadModel.Dtos;
 using RTTicTacToe.CQRS.ReadModel.Queries;
@@ -16,7 +17,7 @@ namespace RTTicTacToe.WebApi.Controllers
     /// 
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
-    [Route("api/[controller]")]
+    [Route("api/game")]
     [ApiController]
     public class GameController : ControllerBase
     {
@@ -30,8 +31,8 @@ namespace RTTicTacToe.WebApi.Controllers
         /// <param name="readModel">Read model.</param>
         public GameController(ICommandSender commandSender, IGameQueries readModel)
         {
-            _readModel = readModel;
             _commandSender = commandSender;
+            _readModel = readModel;
         }
 
         /// <summary>
@@ -187,18 +188,32 @@ namespace RTTicTacToe.WebApi.Controllers
             } 
         }
 
-        // GET api/player/<id>/games        
+        // GET api/game/<id>/movements        
         /// <summary>
-        /// Gets the games where a player participated or is participating.
+        /// Gets the game movements.
         /// </summary>
-        /// <param name="playerId">The identifier of the player.</param>
+        /// <param name="id">The game identifier.</param>
         /// <returns></returns>
-        [HttpGet("player/{playerId}/games")]
-        [ProducesResponseType(typeof(IEnumerable<GameDto>), 200)]
+        [HttpGet("{id}/movements")]
+        [ProducesResponseType(typeof(IEnumerable<MovementDto>), 200)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<IEnumerable<GameDto>>> GetPlayerGames(Guid playerId)
+        public async Task<ActionResult<IEnumerable<GameDto>>> GetGameMovements([FromRoute]Guid id)
         {
-            return Ok(await _readModel.GetPlayerGamesAsync(playerId));
+            return Ok(await _readModel.GetGameMovementsAsync(id));
+        }
+
+        // GET api/game/<id>/events        
+        /// <summary>
+        /// Gets the game events.
+        /// </summary>
+        /// <param name="id">The game identifier.</param>
+        /// <returns></returns>
+        [HttpGet("{id}/events")]
+        [ProducesResponseType(typeof(IEnumerable<EventDto>), 200)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<IEnumerable<EventDto>>> GetGameEvents([FromRoute]Guid id)
+        {
+            return Ok(await _readModel.GetGameEventsAsync(id));
         }
     }
 }
