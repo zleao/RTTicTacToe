@@ -7,11 +7,13 @@ namespace RTTicTacToe.Forms.Services
 {
     public interface IGameService
     {
-        Task<IEnumerable<Game>> GetGamesAsync(bool onlyActive, bool forceRefresh = false);
+        Task<IEnumerable<Game>> GetGamesAsync(bool forceRefresh = false);
         Task<bool> AddGameAsync(string name);
         Task<Game> GetGameAsync(Guid id);
         Task<bool> AddPlayerAsync(Guid gameId, int gameVersion, Guid playerId, string playerName);
-        Task<bool> MakeMovement(Guid gameId, int gameVersion, Guid playerId, short x, short y);
+        Task<bool> MakeMovementAsync(Guid gameId, int gameVersion, Guid playerId, short x, short y);
+        Task<IList<Movement>> GetGameMovementsAsync(Guid gameId);
+        Task<IList<Event>> GetGameEventsAsync(Guid gameId);
 
         bool IsValidPlayer(Player player);
     }

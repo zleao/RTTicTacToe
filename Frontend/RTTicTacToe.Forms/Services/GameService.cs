@@ -24,7 +24,7 @@ namespace RTTicTacToe.Forms.Services
             _games = new List<Game>();
         }
 
-        public async Task<IEnumerable<Game>> GetGamesAsync(bool onlyActive, bool forceRefresh = false)
+        public async Task<IEnumerable<Game>> GetGamesAsync(bool forceRefresh = false)
         {
             if (forceRefresh)
             {
@@ -49,13 +49,13 @@ namespace RTTicTacToe.Forms.Services
 
         public async Task<Game> GetGameAsync(Guid id)
         {
-            if (id != Guid.Empty)
+            if (id == Guid.Empty)
             {
-                var json = await client.GetStringAsync($"api/game/{id}");
-                return await Task.Run(() => JsonConvert.DeserializeObject<Game>(json));
+                return null;
             }
 
-            return null;
+            var json = await client.GetStringAsync($"api/game/{id}");
+            return await Task.Run(() => JsonConvert.DeserializeObject<Game>(json));
         }
 
         public async Task<bool> AddPlayerAsync(Guid gameId, int gameVersion, Guid playerId, string playerName)
@@ -80,7 +80,7 @@ namespace RTTicTacToe.Forms.Services
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> MakeMovement(Guid gameId, int gameVersion, Guid playerId, short x, short y)
+        public async Task<bool> MakeMovementAsync(Guid gameId, int gameVersion, Guid playerId, short x, short y)
         {
             if (gameId == Guid.Empty ||
                 gameVersion < 1 ||
@@ -99,9 +99,31 @@ namespace RTTicTacToe.Forms.Services
                 Y = y
             });
 
-            var response = await client.PostAsync($"api/game/{gameId}/movement", new StringContent(serializedItem, Encoding.UTF8, "application/json"));
+            var response = await client.PostAsync($"api/game/{gameId}/movements", new StringContent(serializedItem, Encoding.UTF8, "application/json"));
 
             return response.IsSuccessStatusCode;
+        }
+
+        public async Task<IList<Movement>> GetGameMovementsAsync(Guid gameId)
+        {
+            if (gameId == Guid.Empty)
+            {
+                return null;
+            }
+
+            var json = await client.GetStringAsync($"api/game/{gameId}/movements");
+            return JsonConvert.DeserializeObject<List<Movement>>(json);
+        }
+
+        public async Task<IList<Event>> GetGameEventsAsync(Guid gameId)
+        {
+            if (gameId == Guid.Empty)
+            {
+                return null;
+            }
+
+            var json = await client.GetStringAsync($"api/game/{gameId}/events");
+            return JsonConvert.DeserializeObject<List<Event>>(json);
         }
 
         public bool IsValidPlayer(Player player)

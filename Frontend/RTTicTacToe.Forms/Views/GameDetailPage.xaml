@@ -1,82 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:converters="clr-namespace:RTTicTacToe.Forms.Converters"
-             x:Class="RTTicTacToe.Forms.Views.GameDetailPage" 
-             Title="{Binding Title}">
+             xmlns:controls="clr-namespace:SegmentedControl.FormsPlugin.Abstractions;assembly=SegmentedControl.FormsPlugin.Abstractions"
+             x:Class="RTTicTacToe.Forms.Views.GameDetailPage" Title="{Binding Title}">
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:NullToBoolConverter x:Key="NullToBool" />
         </ResourceDictionary>
     </ContentPage.Resources>
     <StackLayout>
-    <StackLayout Spacing="0" Padding="15">
-        <StackLayout Orientation="Horizontal">
-            <Label Text="Id:" FontSize="Small" VerticalTextAlignment="Center"/>
-            <Label Text="{Binding GameId}" FontSize="Small" FontAttributes="Bold" VerticalTextAlignment="Center"/>
+        <StackLayout Spacing="0" Padding="15">
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Id:" FontSize="Small" VerticalTextAlignment="Center" />
+                <Label Text="{Binding GameId}" FontSize="Small" FontAttributes="Bold" VerticalTextAlignment="Center" />
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Version:" FontSize="Small" VerticalTextAlignment="Center" />
+                <Label Text="{Binding Version}" FontSize="Small" FontAttributes="Bold" VerticalTextAlignment="Center" />
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Player 1:" FontSize="Small" VerticalTextAlignment="Center" />
+                <Label Text="{Binding Player1.Name}" FontSize="Small" FontAttributes="Bold" VerticalTextAlignment="Center" />
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Player 2:" FontSize="Small" VerticalTextAlignment="Center" />
+                <Label Text="{Binding Player2.Name}" FontSize="Small" FontAttributes="Bold" VerticalTextAlignment="Center" />
+            </StackLayout>
+            <StackLayout>
+                <Button Text="Join Game" Command="{Binding JoinGameCommand}" />
+            </StackLayout>
+            <StackLayout Orientation="Horizontal" IsVisible="{Binding Winner, Converter={StaticResource NullToBool}}">
+                <Label Text="Winner:" FontSize="Small" VerticalTextAlignment="Center" />
+                <Label Text="{Binding Winner?.Name}" FontSize="Medium" TextColor="Red" FontAttributes="Bold" VerticalTextAlignment="Center" />
+            </StackLayout>
+            <BoxView Color="Black" HeightRequest="1" Margin="0,10,0,10" />
+            <Grid BackgroundColor="Black" HorizontalOptions="Center" HeightRequest="162" WidthRequest="162">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="50" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Row="0" Grid.Column="0" BackgroundColor="White" FontSize="Large" BorderRadius="0" Clicked="MovementButtonClicked" x:Name="MovBtn00" />
+                <Button Grid.Row="0" Grid.Column="1" BackgroundColor="White" FontSize="Large" BorderRadius="0" Clicked="MovementButtonClicked" x:Name="MovBtn01" />
+                <Button Grid.Row="0" Grid.Column="2" BackgroundColor="White" FontSize="Large" BorderRadius="0" Clicked="MovementButtonClicked" x:Name="MovBtn02" />
+                <Button Grid.Row="1" Grid.Column="0" BackgroundColor="White" FontSize="Large" BorderRadius="0" Clicked="MovementButtonClicked" x:Name="MovBtn10" />
+                <Button Grid.Row="1" Grid.Column="1" BackgroundColor="White" FontSize="Large" BorderRadius="0" Clicked="MovementButtonClicked" x:Name="MovBtn11" />
+                <Button Grid.Row="1" Grid.Column="2" BackgroundColor="White" FontSize="Large" BorderRadius="0" Clicked="MovementButtonClicked" x:Name="MovBtn12" />
+                <Button Grid.Row="2" Grid.Column="0" BackgroundColor="White" FontSize="Large" BorderRadius="0" Clicked="MovementButtonClicked" x:Name="MovBtn20" />
+                <Button Grid.Row="2" Grid.Column="1" BackgroundColor="White" FontSize="Large" BorderRadius="0" Clicked="MovementButtonClicked" x:Name="MovBtn21" />
+                <Button Grid.Row="2" Grid.Column="2" BackgroundColor="White" FontSize="Large" BorderRadius="0" Clicked="MovementButtonClicked" x:Name="MovBtn22" />
+            </Grid>
+            <BoxView Color="Black" HeightRequest="1" Margin="0,10,0,0" />
         </StackLayout>
-        <StackLayout Orientation="Horizontal">
-            <Label Text="Version:" FontSize="Small" VerticalTextAlignment="Center" />
-            <Label Text="{Binding Version}" FontSize="Small" FontAttributes="Bold" VerticalTextAlignment="Center" />
+        <controls:SegmentedControl x:Name="SegControl" 
+                                   TintColor="#007AFF" 
+                                   SelectedSegment="0"
+                                   ValueChanged="SegControl_ValueChanged">
+          <controls:SegmentedControl.Children>
+            <controls:SegmentedControlOption Text="Movements" />
+            <controls:SegmentedControlOption Text="Events" />
+          </controls:SegmentedControl.Children>
+        </controls:SegmentedControl>
+        <StackLayout x:Name="SegContent" VerticalOptions="StartAndExpand" HorizontalOptions="Fill">
+            <ListView x:Name="GameMovementsListView" 
+                      ItemsSource="{Binding Movements}" 
+                      VerticalOptions="StartAndExpand" 
+                      IsPullToRefreshEnabled="true"
+                      RefreshCommand="{Binding RefreshMovementsCommand}"
+                      IsRefreshing="{Binding IsBusy}" 
+                      CachingStrategy="RecycleElement" 
+                      ItemSelected="Movements_OnItemSelected">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding MovementDetail}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.Footer>
+                    <StackLayout Orientation="Horizontal">
+                    </StackLayout>
+                </ListView.Footer>
+            </ListView>
+            <ListView x:Name="GameEventsListView" 
+                      ItemsSource="{Binding Events}" 
+                      VerticalOptions="StartAndExpand" 
+                      IsPullToRefreshEnabled="true"
+                      RefreshCommand="{Binding RefreshEventsCommand}"
+                      IsRefreshing="{Binding IsBusy}"
+                      CachingStrategy="RecycleElement" 
+                      ItemSelected="Events_OnItemSelected"
+                      IsVisible="false">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding EventTypeDisplay}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.Footer>
+                    <StackLayout Orientation="Horizontal">
+                    </StackLayout>
+                </ListView.Footer>
+            </ListView>
         </StackLayout>
-        <StackLayout Orientation="Horizontal">
-            <Label Text="Player 1:" FontSize="Small" VerticalTextAlignment="Center"/>
-            <Label Text="{Binding Player1.Name}" FontSize="Small" FontAttributes="Bold" VerticalTextAlignment="Center"/>
-        </StackLayout>
-        <StackLayout Orientation="Horizontal">
-            <Label Text="Player 2:" FontSize="Small" VerticalTextAlignment="Center"/>
-            <Label Text="{Binding Player2.Name}" FontSize="Small" FontAttributes="Bold" VerticalTextAlignment="Center"/>
-        </StackLayout>
-        <StackLayout>
-            <Button Text="Join Game" Command="{Binding JoinGameCommand}"/>
-        </StackLayout>
-        <StackLayout Orientation="Horizontal" 
-                     IsVisible="{Binding Winner, Converter={StaticResource NullToBool}}">
-            <Label Text="Winner:" FontSize="Small" VerticalTextAlignment="Center"/>
-            <Label Text="{Binding Winner?.Name}" FontSize="Medium" TextColor="Red" FontAttributes="Bold" VerticalTextAlignment="Center"/>
-        </StackLayout>
-        <BoxView Color="Black" HeightRequest="1" Margin="0,10,0,10"/>
-        <Grid BackgroundColor="Black" 
-              HeightRequest="200" 
-              WidthRequest="200"
-              IsEnabled="{Binding CanMakeMoves}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Button Grid.Row="0" Grid.Column="0" BackgroundColor="White" BorderRadius="0" Clicked="MovementButtonClicked" />
-            <Button Grid.Row="0" Grid.Column="1" BackgroundColor="White" BorderRadius="0" Clicked="MovementButtonClicked"/>
-            <Button Grid.Row="0" Grid.Column="2" BackgroundColor="White" BorderRadius="0" Clicked="MovementButtonClicked"/>
-            <Button Grid.Row="1" Grid.Column="0" BackgroundColor="White" BorderRadius="0" Clicked="MovementButtonClicked"/>
-            <Button Grid.Row="1" Grid.Column="1" BackgroundColor="White" BorderRadius="0" Clicked="MovementButtonClicked"/>
-            <Button Grid.Row="1" Grid.Column="2" BackgroundColor="White" BorderRadius="0" Clicked="MovementButtonClicked"/>
-            <Button Grid.Row="2" Grid.Column="0" BackgroundColor="White" BorderRadius="0" Clicked="MovementButtonClicked"/>
-            <Button Grid.Row="2" Grid.Column="1" BackgroundColor="White" BorderRadius="0" Clicked="MovementButtonClicked"/>
-            <Button Grid.Row="2" Grid.Column="2" BackgroundColor="White" BorderRadius="0" Clicked="MovementButtonClicked"/>
-        </Grid>
-        <BoxView Color="Black" HeightRequest="1" Margin="0,10,0,0"/>
-    </StackLayout>
-    <Label Text="Movements" HorizontalTextAlignment="Center" FontSize="Small" VerticalTextAlignment="Center"/>
-    <ListView x:Name="GameMovementsListView" 
-              ItemsSource="{Binding Movements}"
-              VerticalOptions="EndAndExpand" 
-              IsPullToRefreshEnabled="false" 
-              CachingStrategy="RecycleElement"
-              ItemSelected="OnItemSelected">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextCell Text="{Binding MovementDetail}"/>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-            <ListView.Footer>
-                <StackLayout Orientation="Horizontal"></StackLayout>
-            </ListView.Footer>
-        </ListView>
     </StackLayout>
 </ContentPage>

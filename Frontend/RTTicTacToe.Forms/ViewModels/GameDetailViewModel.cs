@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Acr.UserDialogs;
 using RTTicTacToe.Forms.Models;
 using Xamarin.Forms;
@@ -77,12 +76,22 @@ namespace RTTicTacToe.Forms.ViewModels
             get => _canMakeMoves;
             set => SetProperty(ref _canMakeMoves, value);
         }
+
+        private ObservableCollection<EventExtended> _events;
+        public ObservableCollection<EventExtended> Events
+        {
+            get => _events;
+            set => SetProperty(ref _events, value);
+        }
+
         #endregion
 
         #region Commands
 
-        public Command MakeMovementCommand { get; }
         public Command JoinGameCommand { get; }
+        public Command MakeMovementCommand { get; }
+        public Command RefreshMovementsCommand { get; }
+        public Command RefreshEventsCommand { get; }
 
         #endregion
 
@@ -93,8 +102,10 @@ namespace RTTicTacToe.Forms.ViewModels
             _currentGame = currentGame ?? throw new ArgumentNullException(nameof(currentGame));
             _currentPlayer = currentPlayer ?? throw new ArgumentNullException(nameof(currentPlayer));
 
-            MakeMovementCommand = new Command<Coordinates>(OnMakeMovement);
-            JoinGameCommand = new Command(async() => await OnJoinGameAsync(), CanJoinGame);
+            JoinGameCommand = new Command(async () => await OnJoinGameAsync(), CanJoinGame);
+            MakeMovementCommand = new Command<Coordinates>(async (c) => await OnMakeMovementAsync(c));
+            RefreshMovementsCommand = new Command(async () => await OnRefreshMovementsAsync());
+            RefreshEventsCommand = new Command(async () => await OnRefreshEventsAsync());
 
             RefreshGameValues();
         }
@@ -112,6 +123,7 @@ namespace RTTicTacToe.Forms.ViewModels
             Player1 = _currentGame.Player1;
             Player2 = _currentGame.Player2;
             Movements = new ObservableCollection<MovementExtended>(_currentGame.Movements.Select(m => new MovementExtended(m, Player1, Player2)) ?? new List<MovementExtended>());
+            Events = new ObservableCollection<EventExtended>();
             Winner = _currentGame.Winner;
             Version = _currentGame.Version;
         }
@@ -146,10 +158,50 @@ namespace RTTicTacToe.Forms.ViewModels
             }
         }
 
-        private void OnMakeMovement(Coordinates coord)
+        private Task OnMakeMovementAsync(Coordinates coord)
         {
+            return Task.CompletedTask;
+            //Movements.Add(new MovementExtended(new Movement { PlayerId = Player1.Id, X = coord.X, Y = coord.Y }, Player1, Player2));
         }
-     
+
+        private async Task OnRefreshMovementsAsync()
+        {
+            try
+            {
+                IsBusy = true;
+
+                var movements = (await GameService.GetGameMovementsAsync(_currentGame.Id)).Select(m => new MovementExtended(m, Player1, Player2));
+                Movements = new ObservableCollection<MovementExtended>(movements);
+            }
+            catch (Exception ex)
+            {
+                await UserDialogs.Instance.AlertAsync(ex.Message, "Error", "Ok");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        private async Task OnRefreshEventsAsync()
+        {
+            try
+            {
+                IsBusy = true;
+
+                var events = (await GameService.GetGameEventsAsync(_currentGame.Id)).Select(e => new EventExtended(e));
+                Events = new ObservableCollection<EventExtended>(events);
+            }
+            catch (Exception ex)
+            {
+                await UserDialogs.Instance.AlertAsync(ex.Message, "Error", "Ok");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
         #endregion
     }
 }

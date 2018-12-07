@@ -73,7 +73,7 @@ namespace RTTicTacToe.Forms.ViewModels
             try
             {
                 Games.Clear();
-                var games = await GameService.GetGamesAsync(false, true);
+                var games = await GameService.GetGamesAsync(true);
                 foreach (var game in games)
                 {
                     Games.Add(new GameDetailViewModel(game, CurrentPlayer));

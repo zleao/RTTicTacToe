@@ -7,6 +7,7 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using Acr.UserDialogs;
+using SegmentedControl.FormsPlugin.Android;
 
 namespace RTTicTacToe.Forms.Droid
 {
@@ -20,6 +21,7 @@ namespace RTTicTacToe.Forms.Droid
 
             base.OnCreate(savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+            SegmentedControlRenderer.Init();
 
             UserDialogs.Init(this);
 
