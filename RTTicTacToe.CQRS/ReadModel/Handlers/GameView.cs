@@ -40,9 +40,11 @@ namespace RTTicTacToe.CQRS.ReadModel.Handlers
 
         public async Task Handle(MovementMade message, CancellationToken token = new CancellationToken())
         {
-            await _databaseService.UpdateGameMovementsAsync(message.Id,
-                                                            message.Version,
-                                                            new MovementDto(message.MovementId, message.PlayerId, message.X, message.Y));
+            await _databaseService.UpdateGameBoardAsync(message.Id,
+                                                        message.Version,
+                                                        message.PlayerNumber,
+                                                        message.X, 
+                                                        message.Y);
 
 
             var game = await _databaseService.GetGameByIdAsync(message.Id);

@@ -8,19 +8,7 @@ namespace RTTicTacToe.CQRS.Utilities
 
         public static bool CheckGameFinished(GameDto game)
         {
-            if(game?.Movements == null || game.Movements.Count < MinMovementsToWin)
-            {
-                return false;
-            }
-
-            int[,] gameBoard = new int[3, 3];
-
-            foreach (var mov in game?.Movements)
-            {
-                gameBoard[mov.X, mov.Y] = (mov.PlayerId == game.Player1.Id ? 1 : 2);
-            }
-
-            return CheckAllRows(gameBoard) || CheckAllDiagonals(gameBoard);
+            return CheckAllRows(game.Board) || CheckAllDiagonals(game.Board);
         }
 
         public static bool CheckGameFinished(int[,] gameBoard)

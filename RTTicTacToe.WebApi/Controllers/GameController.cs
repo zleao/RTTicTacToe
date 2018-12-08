@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CQRSlite.Commands;
-using CQRSlite.Events;
 using Microsoft.AspNetCore.Mvc;
 using RTTicTacToe.CQRS.ReadModel.Dtos;
 using RTTicTacToe.CQRS.ReadModel.Queries;
@@ -186,20 +185,6 @@ namespace RTTicTacToe.WebApi.Controllers
             {
                 return StatusCode(500, ex.ExceptionToString());
             } 
-        }
-
-        // GET api/game/<id>/movements        
-        /// <summary>
-        /// Gets the game movements.
-        /// </summary>
-        /// <param name="id">The game identifier.</param>
-        /// <returns></returns>
-        [HttpGet("{id}/movements")]
-        [ProducesResponseType(typeof(IEnumerable<MovementDto>), 200)]
-        [ProducesResponseType(400)]
-        public async Task<ActionResult<IEnumerable<GameDto>>> GetGameMovements([FromRoute]Guid id)
-        {
-            return Ok(await _readModel.GetGameMovementsAsync(id));
         }
 
         // GET api/game/<id>/events        

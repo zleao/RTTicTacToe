@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using Newtonsoft.Json;
 using RTTicTacToe.CQRS.Database.Models;
 using RTTicTacToe.CQRS.ReadModel.Dtos;
 
@@ -25,7 +24,7 @@ namespace RTTicTacToe.CQRS.ReadModel.Infrastructure
                 Player1 = gameDto.Player1.ConvertToModelDb(),
                 Player2 = gameDto.Player2.ConvertToModelDb(),
                 Version = gameDto.Version,
-                Movements = gameDto.Movements.ConvertToModelDb(),
+                BoardJsonString = JsonConvert.SerializeObject(gameDto.Board),
                 Winner = gameDto.Winner.ConvertToModelDb()
             };
         }
@@ -44,32 +43,6 @@ namespace RTTicTacToe.CQRS.ReadModel.Infrastructure
             };
         }
 
-        public static Movement ConvertToModelDb(this MovementDto movementDto)
-        {
-            if (movementDto == null)
-            {
-                return null;
-            }
-
-            return new Movement
-            {
-                Id = movementDto.Id,
-                PlayerId = movementDto.PlayerId,
-                X = movementDto.X,
-                Y = movementDto.Y
-            };
-        }
-
-        public static ICollection<Movement> ConvertToModelDb(this IList<MovementDto> movements)
-        {
-            if (movements == null)
-            {
-                return null;
-            }
-
-            return movements.Select(m => m.ConvertToModelDb()).ToList();
-        }
-
         #endregion
 
         #region To ModelDto Converters
@@ -85,7 +58,7 @@ namespace RTTicTacToe.CQRS.ReadModel.Infrastructure
             {
                 CreationDate = game.CreationDate,
                 LastChangeDate = game.LastChangeDate,
-                Movements = game.Movements.ConvertToModelDto(),
+                Board = JsonConvert.DeserializeObject<int[,]>(game.BoardJsonString ?? string.Empty) ?? new int[3,3],
                 Player1 = game.Player1.ConvertToModelDto(),
                 Player2 = game.Player2.ConvertToModelDto(),
                 Winner = game.Winner.ConvertToModelDto()
@@ -100,26 +73,6 @@ namespace RTTicTacToe.CQRS.ReadModel.Infrastructure
             }
 
             return new PlayerDto(player.Id, player.Name);
-        }
-
-        public static MovementDto ConvertToModelDto(this Movement movement)
-        {
-            if (movement == null)
-            {
-                return null;
-            }
-
-            return new MovementDto(movement.Id, movement.PlayerId, movement.X, movement.Y);
-        }
-
-        public static IList<MovementDto> ConvertToModelDto(this ICollection<Movement> movements)
-        {
-            if (movements == null)
-            {
-                return null;
-            }
-
-            return movements.Select(m => m.ConvertToModelDto()).ToList();
         }
 
         #endregion

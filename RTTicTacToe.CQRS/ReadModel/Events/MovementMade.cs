@@ -8,16 +8,16 @@ namespace RTTicTacToe.CQRS.ReadModel.Events
         public Guid Id { get; set; }
         public int Version { get; set; }
         public DateTimeOffset TimeStamp { get; set; }
-        public Guid MovementId { get; set; }
         public Guid PlayerId { get; set; }
+        public int PlayerNumber { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
 
-        public MovementMade(Guid id, Guid movementId, Guid playerId, int x, int y) 
+        public MovementMade(Guid id, Guid playerId, int playerNumber, int x, int y) 
         {
             Id = id;
-            MovementId = movementId;
             PlayerId = playerId;
+            PlayerNumber = playerNumber;
             X = x;
             Y = y;
         }

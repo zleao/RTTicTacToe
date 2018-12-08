@@ -45,11 +45,6 @@ namespace RTTicTacToe.CQRS.ReadModel.Queries
             return _databaseService.GetPlayerGamesAsync(playerId);
         }
 
-        public async Task<IList<MovementDto>> GetGameMovementsAsync(Guid gameId)
-        {
-            return (await _databaseService.GetGameByIdAsync(gameId)).Movements;
-        }
-
         public async Task<IList<EventDto>> GetGameEventsAsync(Guid gameId)
         {
             var events = await _eventStore.Get(gameId, 0);

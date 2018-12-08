@@ -13,7 +13,6 @@ namespace RTTicTacToe.CQRS.Database
 
         public DbSet<Game> Games { get; set; }
         public DbSet<Player> Players { get; set; }
-        public DbSet<Movement> Movements { get; set; }
         public DbSet<Event> Events { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

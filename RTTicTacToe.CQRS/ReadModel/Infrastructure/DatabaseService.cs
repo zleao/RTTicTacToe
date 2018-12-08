@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using RTTicTacToe.CQRS.Database;
 using RTTicTacToe.CQRS.ReadModel.Dtos;
 
@@ -41,7 +42,6 @@ namespace RTTicTacToe.CQRS.ReadModel.Infrastructure
                                                .Include(g => g.Player1)
                                                .Include(g => g.Player2)
                                                .Include(g => g.Winner)
-                                               .Include(g => g.Movements)
                                                .Select(g => g.ConvertToModelDto()).ToListAsync();
         }
 
@@ -51,7 +51,6 @@ namespace RTTicTacToe.CQRS.ReadModel.Infrastructure
                                                    .Include(g => g.Player1)
                                                    .Include(g => g.Player2)
                                                    .Include(g => g.Winner)
-                                                   .Include(g => g.Movements)
                                                    .FirstOrDefaultAsync(g =>g.Id == id);
 
             return game.ConvertToModelDto();
@@ -64,7 +63,6 @@ namespace RTTicTacToe.CQRS.ReadModel.Infrastructure
                                                       .Include(g => g.Player1)
                                                       .Include(g => g.Player2)
                                                       .Include(g => g.Winner)
-                                                      .Include(g => g.Movements)
                                                       .Where(g => (g.Player1 != null && g.Player1.Id == playerId) ||
                                                                   (g.Player2 != null && g.Player2.Id == playerId))
                                                       .ToListAsync();
@@ -129,38 +127,18 @@ namespace RTTicTacToe.CQRS.ReadModel.Infrastructure
 
         #endregion
 
-        #region Movements
+        #region Board
 
-        public async Task<IList<MovementDto>> GetGameMovementsAsync(Guid gameId)
+        public async Task UpdateGameBoardAsync(Guid gameId, int gameVersion, int playerNumber, int x, int y)
         {
-            var movements = await _databaseContext.Movements.Where(m => m.Game.Id == gameId).ToListAsync();
+            var dbGame = await _databaseContext.Games.FirstAsync(g => g.Id == gameId);
 
-            return movements.Select(p => p.ConvertToModelDto()).ToList();
-        }
+            //update the board value
+            var board = JsonConvert.DeserializeObject<int[,]>(dbGame.BoardJsonString ?? string.Empty) ?? new int[3, 3];
+            board[x, y] = playerNumber;
 
-        public async Task UpdateGameMovementsAsync(Guid gameId, int gameVersion, MovementDto movement)
-        {
-            var dbGame = await _databaseContext.Games.Include(g => g.Movements).FirstAsync(g => g.Id == gameId);
-            var movementDb = dbGame.Movements.FirstOrDefault(m => m.Id == movement.Id);
-            var dateTimeNow = DateTime.Now;
-
-            if(movementDb == null)
-            {
-                //Create a new movement and add it to the game
-                movementDb = movement.ConvertToModelDb();
-                movementDb.CreationDate = dateTimeNow;
-                dbGame.Movements.Add(movementDb);
-            }
-            else
-            {
-                //update existing movement
-                movementDb.PlayerId = movement.PlayerId;
-                movementDb.X = movement.X;
-                movementDb.Y = movement.Y;
-            }
-
-            movementDb.LastChangeDate = dateTimeNow;
-            dbGame.LastChangeDate = dateTimeNow;
+            dbGame.BoardJsonString = JsonConvert.SerializeObject(board);
+            dbGame.LastChangeDate = DateTime.Now;
             dbGame.Version = gameVersion;
 
             await _databaseContext.SaveChangesAsync();

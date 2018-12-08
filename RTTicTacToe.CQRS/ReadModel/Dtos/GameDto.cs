@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace RTTicTacToe.CQRS.ReadModel.Dtos
 {
@@ -9,7 +8,7 @@ namespace RTTicTacToe.CQRS.ReadModel.Dtos
         public string Name { get; private set; }
         public PlayerDto Player1 { get; set; }
         public PlayerDto Player2 { get; set; }
-        public IList<MovementDto> Movements { get; set; }
+        public int[,] Board { get; set; }
         public PlayerDto Winner { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime LastChangeDate { get; set; }
@@ -20,7 +19,7 @@ namespace RTTicTacToe.CQRS.ReadModel.Dtos
             Id = id;
             Name = name;
             Version = version;
-            Movements = new List<MovementDto>();
+            Board = new int[3,3];
         }
     }
 }

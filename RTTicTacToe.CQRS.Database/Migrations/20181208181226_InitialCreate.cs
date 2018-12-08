@@ -47,6 +47,7 @@ namespace RTTicTacToe.CQRS.Database.Migrations
                     CreationDate = table.Column<DateTime>(nullable: false),
                     LastChangeDate = table.Column<DateTime>(nullable: false),
                     Version = table.Column<int>(nullable: false),
+                    BoardJsonString = table.Column<string>(nullable: true),
                     Player1Id = table.Column<Guid>(nullable: true),
                     Player2Id = table.Column<Guid>(nullable: true),
                     WinnerId = table.Column<Guid>(nullable: true)
@@ -74,29 +75,6 @@ namespace RTTicTacToe.CQRS.Database.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Movements",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    X = table.Column<int>(nullable: false),
-                    Y = table.Column<int>(nullable: false),
-                    PlayerId = table.Column<Guid>(nullable: false),
-                    CreationDate = table.Column<DateTime>(nullable: false),
-                    LastChangeDate = table.Column<DateTime>(nullable: false),
-                    GameId = table.Column<Guid>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Movements", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Movements_Games_GameId",
-                        column: x => x.GameId,
-                        principalTable: "Games",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Events_Id",
                 table: "Events",
@@ -116,20 +94,12 @@ namespace RTTicTacToe.CQRS.Database.Migrations
                 name: "IX_Games_WinnerId",
                 table: "Games",
                 column: "WinnerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Movements_GameId",
-                table: "Movements",
-                column: "GameId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "Events");
-
-            migrationBuilder.DropTable(
-                name: "Movements");
 
             migrationBuilder.DropTable(
                 name: "Games");

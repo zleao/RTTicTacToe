@@ -113,7 +113,7 @@ namespace RTTicTacToe.CQRS.WriteModel.Domain
                 _playersTurn = (_playersTurn == 1) ? 2 : 1;
             }
 
-            ApplyChange(new MovementMade(Id, Guid.NewGuid(), playerId, movementX, movementY));
+            ApplyChange(new MovementMade(Id, playerId, _gameBoard[movementX, movementY], movementX, movementY));
         }
 
         public void RegisterPlayer(Guid playerId, string playerName)

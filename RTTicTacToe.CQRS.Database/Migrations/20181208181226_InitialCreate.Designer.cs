@@ -9,7 +9,7 @@ using RTTicTacToe.CQRS.Database;
 namespace RTTicTacToe.CQRS.Database.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20181206164906_InitialCreate")]
+    [Migration("20181208181226_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,6 +45,8 @@ namespace RTTicTacToe.CQRS.Database.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("BoardJsonString");
+
                     b.Property<DateTime>("CreationDate");
 
                     b.Property<DateTime>("LastChangeDate");
@@ -68,30 +70,6 @@ namespace RTTicTacToe.CQRS.Database.Migrations
                     b.HasIndex("WinnerId");
 
                     b.ToTable("Games");
-                });
-
-            modelBuilder.Entity("RTTicTacToe.CQRS.Database.Models.Movement", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("CreationDate");
-
-                    b.Property<Guid?>("GameId");
-
-                    b.Property<DateTime>("LastChangeDate");
-
-                    b.Property<Guid>("PlayerId");
-
-                    b.Property<int>("X");
-
-                    b.Property<int>("Y");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GameId");
-
-                    b.ToTable("Movements");
                 });
 
             modelBuilder.Entity("RTTicTacToe.CQRS.Database.Models.Player", b =>
@@ -123,13 +101,6 @@ namespace RTTicTacToe.CQRS.Database.Migrations
                     b.HasOne("RTTicTacToe.CQRS.Database.Models.Player", "Winner")
                         .WithMany("GamesWon")
                         .HasForeignKey("WinnerId");
-                });
-
-            modelBuilder.Entity("RTTicTacToe.CQRS.Database.Models.Movement", b =>
-                {
-                    b.HasOne("RTTicTacToe.CQRS.Database.Models.Game", "Game")
-                        .WithMany("Movements")
-                        .HasForeignKey("GameId");
                 });
 #pragma warning restore 612, 618
         }

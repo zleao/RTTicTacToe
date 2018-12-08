@@ -10,7 +10,6 @@ namespace RTTicTacToe.CQRS.ReadModel.Queries
         Task<IList<GameDto>> GetAllGamesAsync();
         Task<GameDto> GetGameByIdAsync(Guid id);
         Task<IList<GameDto>> GetPlayerGamesAsync(Guid playerId);
-        Task<IList<MovementDto>> GetGameMovementsAsync(Guid gameId);
         Task<IList<EventDto>> GetGameEventsAsync(Guid gameId);
     }
 }
