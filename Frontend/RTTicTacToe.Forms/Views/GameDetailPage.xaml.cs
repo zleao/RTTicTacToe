@@ -32,7 +32,35 @@ namespace RTTicTacToe.Forms.Views
 
         #endregion
 
+        #region Lifecycle
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            _viewModel.PropertyChanged += ViewModel_PropertyChanged;
+           
+             UpdateBoardLayout();
+        }
+
+        protected override void OnDisappearing()
+        {
+            _viewModel.PropertyChanged -= ViewModel_PropertyChanged;
+
+            base.OnDisappearing();
+        }
+
+        #endregion
+
         #region Event Handlers
+
+        private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == nameof(_viewModel.Board))
+            {
+                UpdateBoardLayout();
+            }
+        }
 
         private void MovementButtonClicked(object sender, EventArgs e)
         {
@@ -53,61 +81,33 @@ namespace RTTicTacToe.Forms.Views
 
         #region Methods
 
-        //private void UpdateSquare(MovementExtended item)
-        //{
-        //    Button btnToUpdate = null;
-        //    if(item.X == 0)
-        //    {
-        //        if(item.Y == 0)
-        //        {
-        //            btnToUpdate = MovBtn00;
-        //        }
-        //        else if(item.Y == 1)
-        //        {
-        //            btnToUpdate = MovBtn01;
-        //        }
-        //        else if (item.Y == 2)
-        //        {
-        //            btnToUpdate = MovBtn02;
-        //        }
-        //    }
-        //    else if(item.X == 1)
-        //    {
-        //        if (item.Y == 0)
-        //        {
-        //            btnToUpdate = MovBtn10;
-        //        }
-        //        else if (item.Y == 1)
-        //        {
-        //            btnToUpdate = MovBtn11;
-        //        }
-        //        else if (item.Y == 2)
-        //        {
-        //            btnToUpdate = MovBtn12;
-        //        }
-        //    }
-        //    else if(item.X == 2)
-        //    {
-        //        if (item.Y == 0)
-        //        {
-        //            btnToUpdate = MovBtn20;
-        //        }
-        //        else if (item.Y == 1)
-        //        {
-        //            btnToUpdate = MovBtn21;
-        //        }
-        //        else if (item.Y == 2)
-        //        {
-        //            btnToUpdate = MovBtn22;
-        //        }
-        //    }
+        private void UpdateBoardLayout()
+        {
+            MovBtn00.Text = GetBoardBtnText(_viewModel.Board[0, 0]);
+            MovBtn01.Text = GetBoardBtnText(_viewModel.Board[0, 1]);
+            MovBtn02.Text = GetBoardBtnText(_viewModel.Board[0, 2]);
+            MovBtn10.Text = GetBoardBtnText(_viewModel.Board[1, 0]);
+            MovBtn11.Text = GetBoardBtnText(_viewModel.Board[1, 1]);
+            MovBtn12.Text = GetBoardBtnText(_viewModel.Board[1, 2]);
+            MovBtn20.Text = GetBoardBtnText(_viewModel.Board[2, 0]);
+            MovBtn21.Text = GetBoardBtnText(_viewModel.Board[2, 1]);
+            MovBtn22.Text = GetBoardBtnText(_viewModel.Board[2, 2]);
+        }
 
-        //    if(btnToUpdate != null)
-        //    {
-        //        btnToUpdate.Text = item.PlayerId == _viewModel.Player1.Id ? "X" : "O";
-        //        btnToUpdate.IsEnabled = false;
-        //    }
-        //}
+        private string GetBoardBtnText(int value)
+        {
+            if(value == 1)
+            {
+                return "X";
+            }
+
+            if(value == 2)
+            {
+                return "O";
+            }
+
+            return string.Empty;
+        }
 
         #endregion
     }

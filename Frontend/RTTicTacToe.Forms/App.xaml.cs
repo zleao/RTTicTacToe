@@ -10,6 +10,7 @@ namespace RTTicTacToe.Forms
     public partial class App : Application
     {
         public static string AzureBackendUrl = "https://rttictactoe.azurewebsites.net";
+        //public static string AzureBackendUrl = "http://localhost:5000";
 
         public App()
         {

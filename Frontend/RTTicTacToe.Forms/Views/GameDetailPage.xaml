@@ -32,7 +32,7 @@
             </StackLayout>
             <StackLayout Orientation="Horizontal" IsVisible="{Binding Winner, Converter={StaticResource NullToBool}}">
                 <Label Text="Winner:" FontSize="Small" VerticalTextAlignment="Center" />
-                <Label Text="{Binding Winner?.Name}" FontSize="Medium" TextColor="Red" FontAttributes="Bold" VerticalTextAlignment="Center" />
+                <Label Text="{Binding Winner.Name}" FontSize="Medium" TextColor="Red" FontAttributes="Bold" VerticalTextAlignment="Center" />
             </StackLayout>
             <BoxView Color="Black" HeightRequest="1" Margin="0,10,0,10" />
             <Grid BackgroundColor="Black" HorizontalOptions="Center" HeightRequest="162" WidthRequest="162">

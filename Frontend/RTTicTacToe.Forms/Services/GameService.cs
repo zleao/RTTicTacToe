@@ -80,7 +80,7 @@ namespace RTTicTacToe.Forms.Services
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> MakeMovementAsync(Guid gameId, int gameVersion, Guid playerId, short x, short y)
+        public async Task<bool> MakeMovementAsync(Guid gameId, int gameVersion, Guid playerId, int x, int y)
         {
             if (gameId == Guid.Empty ||
                 gameVersion < 1 ||
@@ -95,13 +95,24 @@ namespace RTTicTacToe.Forms.Services
             {
                 Version = gameVersion,
                 PlayerId = playerId,
-                X = x,
-                Y = y
+                X = (short)x,
+                Y = (short)y
             });
 
             var response = await client.PostAsync($"api/game/{gameId}/movements", new StringContent(serializedItem, Encoding.UTF8, "application/json"));
 
             return response.IsSuccessStatusCode;
+        }
+
+        public async Task<int[,]> GetGameBoardAsync(Guid gameId)
+        {
+            if (gameId == Guid.Empty)
+            {
+                return null;
+            }
+
+            var json = await client.GetStringAsync($"api/game/{gameId}/board");
+            return JsonConvert.DeserializeObject<int[,]>(json);
         }
 
         public async Task<IList<Event>> GetGameEventsAsync(Guid gameId)

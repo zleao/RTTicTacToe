@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Foundation;
-using SegmentedControl.FormsPlugin.iOS;
+﻿using Foundation;
 using UIKit;
 
 namespace RTTicTacToe.Forms.iOS
@@ -24,7 +19,6 @@ namespace RTTicTacToe.Forms.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
-            SegmentedControlRenderer.Init();
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);

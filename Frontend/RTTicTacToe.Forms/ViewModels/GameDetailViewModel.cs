@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -139,12 +138,18 @@ namespace RTTicTacToe.Forms.ViewModels
             {
                 IsBusy = true;
 
-                await GameService.AddPlayerAsync(_gameGuid, Version, _currentPlayer.Id, _currentPlayer.Name);
-                var updatedGame = await GameService.GetGameAsync(_gameGuid);
-                if (updatedGame != null)
+                if (await GameService.AddPlayerAsync(_gameGuid, Version, _currentPlayer.Id, _currentPlayer.Name))
                 {
-                    _currentGame = updatedGame;
-                    await RefreshGameValuesAsync();
+                    var updatedGame = await GameService.GetGameAsync(_gameGuid);
+                    if (updatedGame != null)
+                    {
+                        _currentGame = updatedGame;
+                        await RefreshGameValuesAsync();
+                    }
+                }
+                else
+                {
+                    await UserDialogs.Instance.AlertAsync("Error adding player", "Error", "Ok");
                 }
             }
             catch (Exception ex)
@@ -157,9 +162,33 @@ namespace RTTicTacToe.Forms.ViewModels
             }
         }
 
-        private Task OnMakeMovementAsync(Coordinates coord)
+        private async Task OnMakeMovementAsync(Coordinates coord)
         {
-            return Task.CompletedTask;
+            try
+            {
+                IsBusy = true;
+
+                if(await GameService.MakeMovementAsync(_gameGuid, Version, _currentPlayer.Id, coord.X, coord.Y))
+                {
+                    var updatedBoard = await GameService.GetGameBoardAsync(_gameGuid);
+                    if (updatedBoard != null)
+                    {
+                        Board = updatedBoard;
+                    }
+                }
+                else
+                {
+                    await UserDialogs.Instance.AlertAsync("Error making movement", "Error", "Ok");
+                }
+            }
+            catch (Exception ex)
+            {
+                await UserDialogs.Instance.AlertAsync(ex.Message, "Error", "Ok");
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         private async Task OnRefreshEventsAsync()
