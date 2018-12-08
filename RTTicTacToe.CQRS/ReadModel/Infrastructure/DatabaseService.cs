@@ -144,6 +144,12 @@ namespace RTTicTacToe.CQRS.ReadModel.Infrastructure
             await _databaseContext.SaveChangesAsync();
         }
 
+        public async Task<int[,]> GetGameBoardAsync(Guid id)
+        {
+            var dbGame = await _databaseContext.Games.FirstAsync(g => g.Id == id);
+            return dbGame.ConvertToModelDto().Board;
+        }
+
         #endregion
     }
 }

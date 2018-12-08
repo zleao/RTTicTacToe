@@ -91,8 +91,6 @@ namespace RTTicTacToe.CQRS.WriteModel.Domain
                 {
                     throw new MovementWrongPlayerException();
                 }
-
-                _gameBoard[movementX, movementY] = 1;
             }
             else if (_playersTurn == 2) //Handle a play for player 2
             {
@@ -100,20 +98,9 @@ namespace RTTicTacToe.CQRS.WriteModel.Domain
                 {
                     throw new MovementWrongPlayerException();
                 }
-
-                _gameBoard[movementX, movementY] = 2;
             }
 
-            if (GameHelper.CheckGameFinished(_gameBoard))
-            {
-                _gameFinished = true;
-            }
-            else
-            {
-                _playersTurn = (_playersTurn == 1) ? 2 : 1;
-            }
-
-            ApplyChange(new MovementMade(Id, playerId, _gameBoard[movementX, movementY], movementX, movementY));
+            ApplyChange(new MovementMade(Id, playerId, _playersTurn, movementX, movementY));
         }
 
         public void RegisterPlayer(Guid playerId, string playerName)
@@ -138,16 +125,29 @@ namespace RTTicTacToe.CQRS.WriteModel.Domain
                 throw new PlayerAlreadyRegisteredInTheGameException();
             }
 
-            int playerNumber = 0;
-            if (_player1Id == Guid.Empty)
+            var playerNumber = (_player1Id == Guid.Empty) ? 1 : 2;
+
+            ApplyChange(new PlayerRegistered(Id, playerId, playerName, playerNumber));
+        }
+
+        #endregion
+
+        #region Events Handling
+
+        private void Apply(GameCreated e)
+        {
+            Id = e.Id;
+        }
+
+        private void Apply(PlayerRegistered e)
+        {
+            if (e.PlayerNumber == 1)
             {
-                _player1Id = playerId;
-                playerNumber = 1;
+                _player1Id = e.PlayerId;
             }
             else
             {
-                _player2Id = playerId;
-                playerNumber = 2;
+                _player2Id = e.PlayerId;
             }
 
             if (_player1Id != Guid.Empty && _player2Id != Guid.Empty)
@@ -155,8 +155,20 @@ namespace RTTicTacToe.CQRS.WriteModel.Domain
                 _gameStarted = true;
                 _playersTurn = 1;
             }
+        }
 
-            ApplyChange(new PlayerRegistered(Id, playerId, playerName, playerNumber));
+        private void Apply(MovementMade e)
+        {
+            _gameBoard[e.X, e.Y] = _playersTurn;
+
+            if (GameHelper.CheckGameFinished(_gameBoard))
+            {
+                _gameFinished = true;
+            }
+            else
+            {
+                _playersTurn = (_playersTurn == 1) ? 2 : 1;
+            }
         }
 
         #endregion
