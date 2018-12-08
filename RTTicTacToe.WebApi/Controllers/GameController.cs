@@ -189,6 +189,20 @@ namespace RTTicTacToe.WebApi.Controllers
 
         // GET api/game/<id>/events        
         /// <summary>
+        /// Gets the game board.
+        /// </summary>
+        /// <param name="id">The game identifier.</param>
+        /// <returns></returns>
+        [HttpGet("{id}/board")]
+        [ProducesResponseType(typeof(IEnumerable<int[,]>), 200)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<IEnumerable<int[,]>>> GetGameBoard([FromRoute]Guid id)
+        {
+            return Ok(await _readModel.GetGameBoardAsync(id));
+        }
+
+        // GET api/game/<id>/events        
+        /// <summary>
         /// Gets the game events.
         /// </summary>
         /// <param name="id">The game identifier.</param>

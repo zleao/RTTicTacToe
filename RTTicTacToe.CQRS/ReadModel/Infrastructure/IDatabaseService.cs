@@ -15,6 +15,7 @@ namespace RTTicTacToe.CQRS.ReadModel.Infrastructure
 
         Task<IList<GameDto>> GetAllGamesAsync();
         Task<GameDto> GetGameByIdAsync(Guid id);
+        Task<int[,]> GetGameBoardAsync(Guid id);
         Task<IList<GameDto>> GetPlayerGamesAsync(Guid playerId);
     }
 }
