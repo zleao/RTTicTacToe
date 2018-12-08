@@ -104,17 +104,6 @@ namespace RTTicTacToe.Forms.Services
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<IList<Movement>> GetGameMovementsAsync(Guid gameId)
-        {
-            if (gameId == Guid.Empty)
-            {
-                return null;
-            }
-
-            var json = await client.GetStringAsync($"api/game/{gameId}/movements");
-            return JsonConvert.DeserializeObject<List<Movement>>(json);
-        }
-
         public async Task<IList<Event>> GetGameEventsAsync(Guid gameId)
         {
             if (gameId == Guid.Empty)

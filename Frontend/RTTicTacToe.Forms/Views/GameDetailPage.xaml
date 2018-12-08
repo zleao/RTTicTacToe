@@ -58,53 +58,24 @@
             </Grid>
             <BoxView Color="Black" HeightRequest="1" Margin="0,10,0,0" />
         </StackLayout>
-        <controls:SegmentedControl x:Name="SegControl" 
-                                   TintColor="#007AFF" 
-                                   SelectedSegment="0"
-                                   ValueChanged="SegControl_ValueChanged">
-          <controls:SegmentedControl.Children>
-            <controls:SegmentedControlOption Text="Movements" />
-            <controls:SegmentedControlOption Text="Events" />
-          </controls:SegmentedControl.Children>
-        </controls:SegmentedControl>
-        <StackLayout x:Name="SegContent" VerticalOptions="StartAndExpand" HorizontalOptions="Fill">
-            <ListView x:Name="GameMovementsListView" 
-                      ItemsSource="{Binding Movements}" 
-                      VerticalOptions="StartAndExpand" 
-                      IsPullToRefreshEnabled="true"
-                      RefreshCommand="{Binding RefreshMovementsCommand}"
-                      IsRefreshing="{Binding IsBusy}" 
-                      CachingStrategy="RecycleElement" 
-                      ItemSelected="Movements_OnItemSelected">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <TextCell Text="{Binding MovementDetail}" />
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-                <ListView.Footer>
-                    <StackLayout Orientation="Horizontal">
-                    </StackLayout>
-                </ListView.Footer>
-            </ListView>
-            <ListView x:Name="GameEventsListView" 
-                      ItemsSource="{Binding Events}" 
-                      VerticalOptions="StartAndExpand" 
-                      IsPullToRefreshEnabled="true"
-                      RefreshCommand="{Binding RefreshEventsCommand}"
-                      IsRefreshing="{Binding IsBusy}"
-                      CachingStrategy="RecycleElement" 
-                      ItemSelected="Events_OnItemSelected"
-                      IsVisible="false">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <TextCell Text="{Binding EventTypeDisplay}" />
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-                <ListView.Footer>
-                    <StackLayout Orientation="Horizontal">
-                    </StackLayout>
-                </ListView.Footer>
-            </ListView>
-        </StackLayout>
+        <Label HorizontalTextAlignment="Center" FontSize="Small">Events</Label>
+        <ListView x:Name="GameEventsListView" 
+                  ItemsSource="{Binding Events}" 
+                  VerticalOptions="StartAndExpand" 
+                  IsPullToRefreshEnabled="true"
+                  RefreshCommand="{Binding RefreshEventsCommand}"
+                  IsRefreshing="{Binding IsBusy}"
+                  CachingStrategy="RecycleElement" 
+                  ItemSelected="Events_OnItemSelected">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextCell Text="{Binding EventTypeDisplay}" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.Footer>
+                <StackLayout Orientation="Horizontal">
+                </StackLayout>
+            </ListView.Footer>
+        </ListView>
     </StackLayout>
 </ContentPage>
