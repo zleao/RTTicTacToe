@@ -9,6 +9,9 @@
             <converters:NullToBoolConverter x:Key="NullToBool" />
         </ResourceDictionary>
     </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Refresh" Command="{Binding RefreshGameCommand}"></ToolbarItem>
+    </ContentPage.ToolbarItems>
     <StackLayout>
         <StackLayout Spacing="0" Padding="15">
             <StackLayout Orientation="Horizontal">
@@ -64,7 +67,7 @@
                   VerticalOptions="StartAndExpand" 
                   IsPullToRefreshEnabled="true"
                   RefreshCommand="{Binding RefreshEventsCommand}"
-                  IsRefreshing="{Binding IsBusy}"
+                  IsRefreshing="{Binding IsLoadingEvents}"
                   CachingStrategy="RecycleElement" 
                   ItemSelected="Events_OnItemSelected">
             <ListView.ItemTemplate>

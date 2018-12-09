@@ -19,6 +19,13 @@ namespace RTTicTacToe.Forms.ViewModels
 
         #region Properties
 
+        private bool _isLoadingEvents;
+        public bool IsLoadingEvents
+        {
+            get => _isLoadingEvents;
+            set => SetProperty(ref _isLoadingEvents, value);
+        }
+
         private Guid _gameGuid;
         private string _gameId;
         public string GameId
@@ -90,6 +97,7 @@ namespace RTTicTacToe.Forms.ViewModels
         public Command JoinGameCommand { get; }
         public Command MakeMovementCommand { get; }
         public Command RefreshEventsCommand { get; }
+        public Command RefreshGameCommand { get; }
 
         #endregion
 
@@ -103,6 +111,7 @@ namespace RTTicTacToe.Forms.ViewModels
             JoinGameCommand = new Command(async () => await OnJoinGameAsync(), CanJoinGame);
             MakeMovementCommand = new Command<Coordinates>(async (c) => await OnMakeMovementAsync(c));
             RefreshEventsCommand = new Command(async () => await OnRefreshEventsAsync());
+            RefreshGameCommand = new Command(async () => await OnRefreshGameAsync());
 
             RefreshGameValuesAsync();
         }
@@ -195,10 +204,29 @@ namespace RTTicTacToe.Forms.ViewModels
         {
             try
             {
-                IsBusy = true;
+                IsLoadingEvents = true;
 
                 var events = (await GameService.GetGameEventsAsync(_currentGame.Id)).Select(e => new EventExtended(e));
                 Events = new ObservableCollection<EventExtended>(events);
+            }
+            catch (Exception ex)
+            {
+                await UserDialogs.Instance.AlertAsync(ex.Message, "Error", "Ok");
+            }
+            finally
+            {
+                IsLoadingEvents = false;
+            }
+        }
+
+        private async Task OnRefreshGameAsync()
+        {
+            try
+            {
+                IsBusy = true;
+
+                _currentGame = await GameService.GetGameAsync(_currentGame.Id);
+                await RefreshGameValuesAsync();
             }
             catch (Exception ex)
             {
