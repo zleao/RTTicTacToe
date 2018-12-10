@@ -24,9 +24,11 @@ namespace RTTicTacToe.CQRS.ReadModel.Handlers
             _gameHub = gameHub;
         }
 
-        public Task Handle(GameCreated message, CancellationToken token = new CancellationToken())
+        public async Task Handle(GameCreated message, CancellationToken token = new CancellationToken())
         {
-            return _databaseService.AddNewGameAsync(message.Id, message.Name, message.Version);
+            await _databaseService.AddNewGameAsync(message.Id, message.Name, message.Version);
+
+            await _gameHub.Clients.All.GameCreated();
         }
 
         public async Task Handle(PlayerRegistered message, CancellationToken token = new CancellationToken())

@@ -8,7 +8,7 @@ namespace RTTicTacToe.CQRS.Hubs
     /// <summary>
     /// SignalR hub for game.
     /// </summary>
-    public class GameHub : Hub<IGameHub>
+    public class GameHub : Hub<IGameHub>, IGameHubEndpoint
     {
         /// <summary>
         /// When a player whant to register himself to receive notifications of a game.
