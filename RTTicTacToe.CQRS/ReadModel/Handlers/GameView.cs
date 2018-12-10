@@ -1,10 +1,13 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using CQRSlite.Events;
+using Microsoft.AspNetCore.SignalR;
+using RTTicTacToe.CQRS.Hubs;
 using RTTicTacToe.CQRS.ReadModel.Dtos;
 using RTTicTacToe.CQRS.ReadModel.Events;
 using RTTicTacToe.CQRS.ReadModel.Infrastructure;
 using RTTicTacToe.CQRS.Utilities;
+using RTTicTacToe.WebApi.Models.Hubs;
 
 namespace RTTicTacToe.CQRS.ReadModel.Handlers
 {
@@ -13,10 +16,12 @@ namespace RTTicTacToe.CQRS.ReadModel.Handlers
                             ICancellableEventHandler<MovementMade>
     {
         private readonly IDatabaseService _databaseService;
+        private readonly IHubContext<GameHub, IGameHub> _gameHub;
 
-        public GameView(IDatabaseService databaseService)
+        public GameView(IDatabaseService databaseService, IHubContext<GameHub, IGameHub> gameHub)
         {
-            this._databaseService = databaseService;
+            _databaseService = databaseService;
+            _gameHub = gameHub;
         }
 
         public Task Handle(GameCreated message, CancellationToken token = new CancellationToken())
@@ -36,6 +41,8 @@ namespace RTTicTacToe.CQRS.ReadModel.Handlers
             {
                 await _databaseService.UpdatePlayer2Async(message.Id, message.Version, newPlayer);
             }
+
+            await _gameHub.Clients.Group(message.Id.ToString()).PlayerJoinedGame(message.Id);
         }
 
         public async Task Handle(MovementMade message, CancellationToken token = new CancellationToken())
@@ -51,6 +58,12 @@ namespace RTTicTacToe.CQRS.ReadModel.Handlers
             if (GameHelper.CheckGameFinished(game))
             {
                 await _databaseService.UpdateWinnerAsync(message.Id, message.Version, message.PlayerId);
+
+                await _gameHub.Clients.Group(message.Id.ToString()).GameFinished(message.Id);
+            }
+            else
+            {
+                await _gameHub.Clients.Group(message.Id.ToString()).MovementMade(message.Id);
             }
         }
     }

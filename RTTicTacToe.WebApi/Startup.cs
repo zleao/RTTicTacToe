@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NJsonSchema;
 using NSwag.AspNetCore;
 using RTTicTacToe.CQRS.Database;
+using RTTicTacToe.CQRS.Hubs;
 using RTTicTacToe.CQRS.ReadModel.Infrastructure;
 using RTTicTacToe.CQRS.ReadModel.Queries;
 using RTTicTacToe.CQRS.WriteModel.EventStore;
@@ -90,6 +91,9 @@ namespace RTTicTacToe.WebApi
             var serviceProvider = services.BuildServiceProvider();
             var registrar = new RouteRegistrar(new Provider(serviceProvider));
             registrar.RegisterInAssemblyOf(typeof(GameCommandHandlers));
+
+            //Add support for SignalR
+            services.AddSignalR();
         }
 
         /// <summary>
@@ -107,10 +111,17 @@ namespace RTTicTacToe.WebApi
             
             app.UseStaticFiles();
 
+            //Register SignalR endpoint
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<GameHub>("/api/gamehub");
+            });
+
             // Register the Swagger generator and the Swagger UI middlewares
             app.UseSwaggerUi3WithApiExplorer(settings =>
             {
                 settings.GeneratorSettings.DefaultPropertyNameHandling = PropertyNameHandling.CamelCase;
+                settings.GeneratorSettings.Title = "RTTicTacToe - API";
             });
 
             app.UseMvc();

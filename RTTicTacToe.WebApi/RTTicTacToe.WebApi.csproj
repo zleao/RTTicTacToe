@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RTTicTacToe.CQRS\RTTicTacToe.CQRS.csproj" />
-    <ProjectReference Include="..\RTTicTacToe.WebApi.Models\RTTicTacToe.WebApi.Models.csproj" />
     <ProjectReference Include="..\RTTicTacToe.CQRS.Database\RTTicTacToe.CQRS.Database.csproj" />
   </ItemGroup>
 
