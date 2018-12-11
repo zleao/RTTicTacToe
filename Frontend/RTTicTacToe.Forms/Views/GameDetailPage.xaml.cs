@@ -50,11 +50,15 @@ namespace RTTicTacToe.Forms.Views
             base.OnAppearing();
 
             _viewModel.PropertyChanged += ViewModel_PropertyChanged;
+
+            _viewModel.PrepareToShowGameAsync();
         }
 
         protected override void OnDisappearing()
         {
             _viewModel.PropertyChanged -= ViewModel_PropertyChanged;
+
+            _viewModel.PrepareToLeaveGameAsync();
 
             base.OnDisappearing();
         }
@@ -69,6 +73,7 @@ namespace RTTicTacToe.Forms.Views
             {
                 if (_viewModel.IsBusy)
                 {
+
                     UserDialogs.Instance.ShowLoading();
                 }
                 else
@@ -103,15 +108,18 @@ namespace RTTicTacToe.Forms.Views
 
         private void UpdateBoardLayout()
         {
-            MovBtn00.Text = GetBoardBtnText(_viewModel.Board[0, 0]);
-            MovBtn01.Text = GetBoardBtnText(_viewModel.Board[0, 1]);
-            MovBtn02.Text = GetBoardBtnText(_viewModel.Board[0, 2]);
-            MovBtn10.Text = GetBoardBtnText(_viewModel.Board[1, 0]);
-            MovBtn11.Text = GetBoardBtnText(_viewModel.Board[1, 1]);
-            MovBtn12.Text = GetBoardBtnText(_viewModel.Board[1, 2]);
-            MovBtn20.Text = GetBoardBtnText(_viewModel.Board[2, 0]);
-            MovBtn21.Text = GetBoardBtnText(_viewModel.Board[2, 1]);
-            MovBtn22.Text = GetBoardBtnText(_viewModel.Board[2, 2]);
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                MovBtn00.Text = GetBoardBtnText(_viewModel.Board[0, 0]);
+                MovBtn01.Text = GetBoardBtnText(_viewModel.Board[0, 1]);
+                MovBtn02.Text = GetBoardBtnText(_viewModel.Board[0, 2]);
+                MovBtn10.Text = GetBoardBtnText(_viewModel.Board[1, 0]);
+                MovBtn11.Text = GetBoardBtnText(_viewModel.Board[1, 1]);
+                MovBtn12.Text = GetBoardBtnText(_viewModel.Board[1, 2]);
+                MovBtn20.Text = GetBoardBtnText(_viewModel.Board[2, 0]);
+                MovBtn21.Text = GetBoardBtnText(_viewModel.Board[2, 1]);
+                MovBtn22.Text = GetBoardBtnText(_viewModel.Board[2, 2]);
+            });
         }
 
         private string GetBoardBtnText(int value)

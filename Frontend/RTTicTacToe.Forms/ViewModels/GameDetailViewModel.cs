@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
+using RTTicTacToe.Forms.Messages;
 using RTTicTacToe.Forms.Models;
 using RTTicTacToe.Forms.Services;
 using Xamarin.Forms;
@@ -127,10 +128,32 @@ namespace RTTicTacToe.Forms.ViewModels
             _currentGame = currentGame ?? throw new ArgumentNullException(nameof(currentGame));
             _currentPlayer = currentPlayer ?? throw new ArgumentNullException(nameof(currentPlayer));
 
-            return RefreshGameValuesAsync();
+            return RefreshGameValuesAsync(false);
         }
 
-        private Task RefreshGameValuesAsync()
+        public async Task PrepareToShowGameAsync()
+        {
+            MessagingCenter.Subscribe<GameHubService, PlayerJoinedGameMessage>(this, nameof(PlayerJoinedGameMessage), HandlePlayerJoinedGameMessage);
+            MessagingCenter.Subscribe<GameHubService, MovementMadeMessage>(this, nameof(MovementMadeMessage), HandleMovementMadeMessage);
+            MessagingCenter.Subscribe<GameHubService, GameFinishedMessage>(this, nameof(GameFinishedMessage), HandleGameFinishedMessage);
+
+            await GameHubService.RegisterForGame(_currentGame.Id);
+
+            await OnRefreshEventsAsync();
+        }
+
+        public async Task PrepareToLeaveGameAsync()
+        {
+            await GameHubService.UnregisterForGame(_currentGame.Id);
+
+            MessagingCenter.Unsubscribe<GameHubService>(this, nameof(PlayerJoinedGameMessage));
+            MessagingCenter.Unsubscribe<GameHubService>(this, nameof(MovementMadeMessage));
+            MessagingCenter.Unsubscribe<GameHubService>(this, nameof(GameFinishedMessage));
+
+            await OnRefreshEventsAsync();
+        }
+
+        private Task RefreshGameValuesAsync(bool refreshEvents = true)
         {
             _gameGuid = _currentGame.Id;
             GameId = _gameGuid.ToString();
@@ -142,7 +165,12 @@ namespace RTTicTacToe.Forms.ViewModels
             Winner = _currentGame.Winner;
             Version = _currentGame.Version;
 
-            return OnRefreshEventsAsync();
+            if(refreshEvents)
+            {
+                return OnRefreshEventsAsync();
+            }
+
+            return Task.CompletedTask;
         }
 
         private bool CanJoinGame()
@@ -159,15 +187,11 @@ namespace RTTicTacToe.Forms.ViewModels
 
                 if (await GameService.AddPlayerAsync(_gameGuid, Version, _currentPlayer.Id, _currentPlayer.Name))
                 {
-                    var updatedGame = await GameService.GetGameAsync(_gameGuid);
-                    if (updatedGame != null)
-                    {
-                        _currentGame = updatedGame;
-                        await RefreshGameValuesAsync();
-                    }
+                    await OnRefreshGameAsync();
                 }
                 else
                 {
+                    IsBusy = false;
                     await UserDialogs.Instance.AlertAsync("Error adding player", "Error", "Ok");
                 }
             }
@@ -197,6 +221,7 @@ namespace RTTicTacToe.Forms.ViewModels
                 }
                 else
                 {
+                    IsBusy = false;
                     await UserDialogs.Instance.AlertAsync("Error making movement", "Error", "Ok");
                 }
             }
@@ -240,12 +265,50 @@ namespace RTTicTacToe.Forms.ViewModels
             }
             catch (Exception ex)
             {
+                IsBusy = false;
                 await UserDialogs.Instance.AlertAsync(ex.Message, "Error", "Ok");
             }
             finally
             {
                 IsBusy = false;
             }
+        }
+
+
+        private void HandlePlayerJoinedGameMessage(GameHubService sender, PlayerJoinedGameMessage message)
+        {
+            if(message.GameId != _currentGame.Id)
+            {
+                //this should not happen. 
+                //A player should not receive a notification for a game that is not registered for
+                return;
+            }
+
+            OnRefreshGameAsync();
+        }
+
+        private void HandleMovementMadeMessage(GameHubService sender, MovementMadeMessage message)
+        {
+            if (message.GameId != _currentGame.Id)
+            {
+                //this should not happen. 
+                //A player should not receive a notification for a game that is not registered for
+                return;
+            }
+
+            OnRefreshGameAsync();
+        }
+
+        private void HandleGameFinishedMessage(GameHubService sender, GameFinishedMessage message)
+        {
+            if (message.GameId != _currentGame.Id)
+            {
+                //this should not happen. 
+                //A player should not receive a notification for a game that is not registered for
+                return;
+            }
+
+            OnRefreshGameAsync();
         }
 
         #endregion
