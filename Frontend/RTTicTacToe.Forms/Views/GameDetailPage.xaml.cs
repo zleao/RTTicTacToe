@@ -1,4 +1,5 @@
 ﻿using System;
+using Acr.UserDialogs;
 using RTTicTacToe.Forms.Models;
 using RTTicTacToe.Forms.ViewModels;
 using Xamarin.Forms;
@@ -7,11 +8,17 @@ using Xamarin.Forms.Xaml;
 namespace RTTicTacToe.Forms.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class GameDetailPage : ContentPage
+    public partial class GameDetailPage : BaseContentPage
     {
         #region Fields
 
         readonly GameDetailViewModel _viewModel;
+
+        #endregion
+
+        #region Properties
+
+        protected override ToolbarItem ConnStateToolbarItem => ConnectionStateToolbarItem;
 
         #endregion
 
@@ -28,6 +35,10 @@ namespace RTTicTacToe.Forms.Views
             InitializeComponent();
 
             BindingContext = _viewModel = viewModel;
+
+            UpdateConnectionStateToolbarItem();
+
+            UpdateBoardLayout();
         }
 
         #endregion
@@ -39,8 +50,6 @@ namespace RTTicTacToe.Forms.Views
             base.OnAppearing();
 
             _viewModel.PropertyChanged += ViewModel_PropertyChanged;
-           
-             UpdateBoardLayout();
         }
 
         protected override void OnDisappearing()
@@ -56,7 +65,18 @@ namespace RTTicTacToe.Forms.Views
 
         private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if(e.PropertyName == nameof(_viewModel.Board))
+            if (e.PropertyName == nameof(_viewModel.IsBusy))
+            {
+                if (_viewModel.IsBusy)
+                {
+                    UserDialogs.Instance.ShowLoading();
+                }
+                else
+                {
+                    UserDialogs.Instance.HideLoading();
+                }
+            }
+            else if (e.PropertyName == nameof(_viewModel.Board))
             {
                 UpdateBoardLayout();
             }

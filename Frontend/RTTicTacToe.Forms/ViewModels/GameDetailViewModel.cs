@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using RTTicTacToe.Forms.Models;
+using RTTicTacToe.Forms.Services;
 using Xamarin.Forms;
 
 namespace RTTicTacToe.Forms.ViewModels
@@ -12,7 +13,7 @@ namespace RTTicTacToe.Forms.ViewModels
     {
         #region Fields
 
-        private readonly Player _currentPlayer;
+        private Player _currentPlayer;
         private Game _currentGame;
 
         #endregion
@@ -103,22 +104,31 @@ namespace RTTicTacToe.Forms.ViewModels
 
         #region Constructor
 
-        public GameDetailViewModel(Game currentGame, Player currentPlayer)
+        public GameDetailViewModel(IMessagingCenter messagingCenter,
+                                   IGameService gameService,
+                                   IGameHubService gameHubService,
+                                   ILocalStorageService localStorageService)
+            : base(messagingCenter, gameService, gameHubService, localStorageService)
         {
-            _currentGame = currentGame ?? throw new ArgumentNullException(nameof(currentGame));
-            _currentPlayer = currentPlayer ?? throw new ArgumentNullException(nameof(currentPlayer));
+
 
             JoinGameCommand = new Command(async () => await OnJoinGameAsync(), CanJoinGame);
             MakeMovementCommand = new Command<Coordinates>(async (c) => await OnMakeMovementAsync(c));
             RefreshEventsCommand = new Command(async () => await OnRefreshEventsAsync());
             RefreshGameCommand = new Command(async () => await OnRefreshGameAsync());
-
-            RefreshGameValuesAsync();
         }
 
         #endregion
 
         #region Methods
+
+        public Task InitializeValuesAsync(Game currentGame, Player currentPlayer)
+        {
+            _currentGame = currentGame ?? throw new ArgumentNullException(nameof(currentGame));
+            _currentPlayer = currentPlayer ?? throw new ArgumentNullException(nameof(currentPlayer));
+
+            return RefreshGameValuesAsync();
+        }
 
         private Task RefreshGameValuesAsync()
         {

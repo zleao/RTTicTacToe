@@ -1,5 +1,6 @@
 ﻿using System;
-
+using CommonServiceLocator;
+using RTTicTacToe.Forms.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -11,6 +12,8 @@ namespace RTTicTacToe.Forms.Views
         public AboutPage()
         {
             InitializeComponent();
+
+            BindingContext = ServiceLocator.Current.GetInstance<AboutViewModel>();
         }
     }
 }

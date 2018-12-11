@@ -3,13 +3,22 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
+using CommonServiceLocator;
+using RTTicTacToe.Forms.Messages;
 using RTTicTacToe.Forms.Models;
+using RTTicTacToe.Forms.Services;
 using Xamarin.Forms;
 
 namespace RTTicTacToe.Forms.ViewModels
 {
     public class GamesViewModel : BaseViewModel
     {
+        #region Fields
+
+        private bool _isInitialized;
+
+        #endregion
+
         #region Properties
 
         private Player _currentPlayer;
@@ -26,10 +35,18 @@ namespace RTTicTacToe.Forms.ViewModels
             set => SetProperty(ref _games, value);
         }
 
+        private bool _isLoadingGames;
+        public bool IsLoadingGames
+        {
+            get => _isLoadingGames;
+            set => SetProperty(ref _isLoadingGames, value);
+        }
+
         #endregion
 
         #region Commands
 
+        public Command EnsureInitCommand { get; set; }
         public Command LoadGamesCommand { get; set; }
         public Command CreateNewGameCommand { get; set; }
 
@@ -37,17 +54,59 @@ namespace RTTicTacToe.Forms.ViewModels
 
         #region Constructor
 
-        public GamesViewModel()
+        public GamesViewModel(IMessagingCenter messagingCenter,
+                              IGameService gameService,
+                              IGameHubService gameHubService,
+                              ILocalStorageService localStorageService)
+            : base(messagingCenter, gameService, gameHubService, localStorageService)
         {
             Title = "Games";
             Games = new ObservableCollection<GameDetailViewModel>();
+
+            EnsureInitCommand = new Command(async () => await OnEnsureInitAsync());
             LoadGamesCommand = new Command(async () => await OnLoadGamesAsync());
             CreateNewGameCommand = new Command(async () => await OnCreateNewGameAsync());
+
+            MessagingCenter.Subscribe<GameHubService, GameCreatedMessage>(this, nameof(GameCreatedMessage), HandleGameCreated);
         }
 
         #endregion
 
         #region Methods
+
+        public async Task OnEnsureInitAsync()
+        {
+            try
+            {
+                //ensure the player is created
+                var playerCreated = await EnsurePlayerIsCreatedAsync();
+                while (!playerCreated) { playerCreated = await EnsurePlayerIsCreatedAsync(); };
+
+
+                //ensure the game hub is started
+                if(!GameHubService.IsOnline)
+                {
+                    IsBusy = true;
+
+                    await GameHubService.StartHubAsync();
+                }
+
+                if(!_isInitialized)
+                {
+                    IsBusy = true;
+                    await OnLoadGamesAsync();
+                    _isInitialized = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
 
         private async Task OnCreateNewGameAsync()
         {
@@ -65,10 +124,10 @@ namespace RTTicTacToe.Forms.ViewModels
 
         private async Task OnLoadGamesAsync()
         {
-            if (IsBusy)
+            if (IsLoadingGames)
                 return;
 
-            IsBusy = true;
+            IsLoadingGames = true;
 
             try
             {
@@ -76,7 +135,10 @@ namespace RTTicTacToe.Forms.ViewModels
                 var games = await GameService.GetGamesAsync(true);
                 foreach (var game in games)
                 {
-                    Games.Add(new GameDetailViewModel(game, CurrentPlayer));
+                    var newGame = ServiceLocator.Current.GetInstance<GameDetailViewModel>();
+                    await newGame.InitializeValuesAsync(game, CurrentPlayer);
+
+                    Games.Add(newGame);
                 }
             }
             catch (Exception ex)
@@ -85,7 +147,7 @@ namespace RTTicTacToe.Forms.ViewModels
             }
             finally
             {
-                IsBusy = false;
+                IsLoadingGames = false;
             }
         }
 
@@ -120,6 +182,11 @@ namespace RTTicTacToe.Forms.ViewModels
             }
 
             return false;
+        }
+
+        private void HandleGameCreated(GameHubService sender, GameCreatedMessage message)
+        {
+            OnLoadGamesAsync();
         }
 
         #endregion

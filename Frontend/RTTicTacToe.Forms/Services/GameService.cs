@@ -11,8 +11,14 @@ namespace RTTicTacToe.Forms.Services
 {
     public class GameService : IGameService
     {
+        #region Fields
+
         HttpClient client;
         IEnumerable<Game> _games;
+
+        #endregion
+
+        #region Constructor
 
         public GameService()
         {
@@ -23,6 +29,10 @@ namespace RTTicTacToe.Forms.Services
 
             _games = new List<Game>();
         }
+
+        #endregion
+
+        #region Methods
 
         public async Task<IEnumerable<Game>> GetGamesAsync(bool forceRefresh = false)
         {
@@ -130,5 +140,7 @@ namespace RTTicTacToe.Forms.Services
         {
             return player != null && player.Id != Guid.Empty && !string.IsNullOrEmpty(player.Name);
         }
+
+        #endregion
     }
 }

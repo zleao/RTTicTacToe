@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using RTTicTacToe.Forms.Messages;
 using RTTicTacToe.Forms.Services;
 using Xamarin.Forms;
 
@@ -9,8 +11,12 @@ namespace RTTicTacToe.Forms.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        public IGameService GameService => DependencyService.Get<IGameService>();
-        public ILocalStorageService LocalStorageService => DependencyService.Get<ILocalStorageService>();
+        #region Properties
+
+        public IMessagingCenter MessagingCenter { get; }
+        public IGameService GameService { get; }
+        public IGameHubService GameHubService { get; }
+        public ILocalStorageService LocalStorageService { get; }
 
         bool isBusy = false;
         public bool IsBusy
@@ -26,6 +32,53 @@ namespace RTTicTacToe.Forms.ViewModels
             set { SetProperty(ref title, value); }
         }
 
+        #endregion
+
+        #region Commands
+
+        public Command TryReconnectCommand { get; }
+
+        #endregion
+
+        #region Constructor
+
+        public BaseViewModel(IMessagingCenter messagingCenter, 
+                             IGameService gameService, 
+                             IGameHubService gameHubService,
+                             ILocalStorageService localStorageService)
+        {
+            MessagingCenter = messagingCenter;
+            GameService = gameService;
+            GameHubService = gameHubService;
+            LocalStorageService = localStorageService;
+
+            TryReconnectCommand = new Command(async () => await OnTryReconnectAsync(), CanTryReconnect);
+
+            messagingCenter.Subscribe<GameHubService, ConnectionStateChangedMessage>(this, nameof(ConnectionStateChangedMessage), HandleConnectionStateChanged);
+        }
+
+        #endregion
+
+        #region Methods
+
+        private bool CanTryReconnect()
+        {
+            return !GameHubService.IsOnline && !GameHubService.IsReconnecting;
+        }
+        private Task OnTryReconnectAsync()
+        {
+            return GameHubService.StartHubAsync();
+        }
+
+        protected virtual void HandleConnectionStateChanged(IGameHubService sender, ConnectionStateChangedMessage message)
+        {
+            Device.BeginInvokeOnMainThread(TryReconnectCommand.ChangeCanExecute);
+        }
+
+        #endregion
+
+        #region INotifyPropertyChanged
+
         protected bool SetProperty<T>(ref T backingStore, T value,
             [CallerMemberName]string propertyName = "",
             Action onChanged = null)
@@ -39,8 +92,8 @@ namespace RTTicTacToe.Forms.ViewModels
             return true;
         }
 
-        #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             var changed = PropertyChanged;
@@ -49,6 +102,7 @@ namespace RTTicTacToe.Forms.ViewModels
 
             changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
         #endregion
     }
 }
