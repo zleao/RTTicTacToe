@@ -1,6 +1,10 @@
 ﻿using System;
+using CommonServiceLocator;
 using RTTicTacToe.Forms.Services;
+using RTTicTacToe.Forms.ViewModels;
 using RTTicTacToe.Forms.Views;
+using Unity;
+using Unity.ServiceLocation;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -16,7 +20,7 @@ namespace RTTicTacToe.Forms
         {
             InitializeComponent();
 
-            RegisterClasses();
+            RegisterDependencies();
 
             MainPage = new MainPage();
         }
@@ -36,10 +40,24 @@ namespace RTTicTacToe.Forms
             // Handle when your app resumes
         }
 
-        private void RegisterClasses()
+        private void RegisterDependencies()
         {
-            DependencyService.Register<IGameService, GameService>();
-            DependencyService.Register<ILocalStorageService, LocalStorageService>();
+            var unityContainer = new UnityContainer();
+
+            //Register services
+            unityContainer.RegisterSingleton<IMessagingCenter, MessagingCenter>();
+            unityContainer.RegisterSingleton<IGameHubService, GameHubService>();
+            unityContainer.RegisterSingleton<IGameService, GameService>();
+            unityContainer.RegisterSingleton<ILocalStorageService, LocalStorageService>();
+
+            //Register viewmodels
+            unityContainer.RegisterType<AboutViewModel>();
+            unityContainer.RegisterType<GamesViewModel>();
+            unityContainer.RegisterType<GameDetailViewModel>();
+
+            //Set locator provider
+            var unityServiceLocator = new UnityServiceLocator(unityContainer);
+            ServiceLocator.SetLocatorProvider(() => unityServiceLocator);
         }
     }
 }
