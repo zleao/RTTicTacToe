@@ -84,7 +84,10 @@ namespace RTTicTacToe.WebApi
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddSwagger();
+            services.AddSwaggerDocument(settings =>
+            {
+                settings.Title = "RTTicTacToe - API";
+            });
 
             //Register routes
             services.AddHttpContextAccessor(); // No longer registered by default in ASP.NET Core 2.1
@@ -118,11 +121,8 @@ namespace RTTicTacToe.WebApi
             });
 
             // Register the Swagger generator and the Swagger UI middlewares
-            app.UseSwaggerUi3WithApiExplorer(settings =>
-            {
-                settings.GeneratorSettings.DefaultPropertyNameHandling = PropertyNameHandling.CamelCase;
-                settings.GeneratorSettings.Title = "RTTicTacToe - API";
-            });
+            app.UseSwagger(); 
+            app.UseSwaggerUi3();
 
             app.UseMvc();
         }

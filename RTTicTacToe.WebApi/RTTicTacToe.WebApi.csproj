@@ -5,9 +5,7 @@
     <UserSecretsId>5bfaffef-3af2-4e8c-b8cc-f15d0c88b68a</UserSecretsId>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\netcoreapp2.1\C:\Work\Github\RTTicTacToe\RTTicTacToe.WebApi\RTTicTacToe.WebApi.xml</DocumentationFile>
-  </PropertyGroup>
+  
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
@@ -18,8 +16,8 @@
     <PackageReference Include="CqrsLite" Version="0.26.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
-    <PackageReference Include="NSwag.AspNetCore" Version="11.20.1" />
-    <PackageReference Include="Scrutor" Version="3.0.1" />
+    <PackageReference Include="NSwag.AspNetCore" Version="12.0.7" />
+    <PackageReference Include="Scrutor" Version="3.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.4" />
   </ItemGroup>
 
