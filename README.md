@@ -13,10 +13,11 @@ Simple Asp.NetCore API with a CQRS/ES pattern. For real time communication, it u
 - EFCore.Sqlite v2.1.4
 
 ## Frontend
-Xamarin Forms 3.3.0 ([master](https://github.com/zleao/RTTicTacToe/tree/master) branch)
-Xamarin Forms v4.0 pre1 ([XamForms4](https://github.com/zleao/RTTicTacToe/tree/XamForms4) branch)
-
 Support for **iOS** and **Android**
+- Xamarin Forms 3.3.0 ([master](https://github.com/zleao/RTTicTacToe/tree/master) branch)
+- Xamarin Forms v4.0 pre1 ([XamForms4](https://github.com/zleao/RTTicTacToe/tree/XamForms4) branch)
+
+
 
 ## Run the code
 I've used VS2017 15.9.4 and VSMac 7.7 to implement and debug both the Backend and Frontend.
