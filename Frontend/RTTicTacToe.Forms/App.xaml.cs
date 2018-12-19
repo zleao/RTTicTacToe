@@ -22,7 +22,7 @@ namespace RTTicTacToe.Forms
 
             RegisterDependencies();
 
-            MainPage = new MainPage();
+            MainPage = new AppShell();
         }
 
         protected override void OnStart()

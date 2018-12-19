@@ -5,7 +5,7 @@
              x:Class="RTTicTacToe.Forms.Views.GamesPage" 
              Title="{Binding Title}" 
              x:Name="BrowseGamesPage">
-    <ContentPage.ToolbarItems>
+    <views:BaseContentPage.ToolbarItems>
         <ToolbarItem Text="Add" Command="{Binding CreateNewGameCommand}">
             <ToolbarItem.Icon>
                 <OnPlatform x:TypeArguments="FileImageSource">
@@ -16,8 +16,8 @@
         <ToolbarItem x:Name="ConnectionStateToolbarItem"
                      Order="Primary"
                      Command="{Binding TryReconnectCommand}"/>
-    </ContentPage.ToolbarItems>
-    <ContentPage.Content>
+    </views:BaseContentPage.ToolbarItems>
+    <views:BaseContentPage.Content>
         <StackLayout>
             <Label HorizontalTextAlignment="Center" Text="{Binding CurrentPlayer.Name}"/>
             <ListView x:Name="GamesListView" 
@@ -40,5 +40,5 @@
                 </ListView.Footer>
             </ListView>
         </StackLayout>
-    </ContentPage.Content>
+    </views:BaseContentPage.Content>
 </views:BaseContentPage>
