@@ -7,7 +7,7 @@ Simple Asp.NetCore API with a CQRS/ES pattern. For real time communication, it u
 **Key technologies:**
 - Asp.NetCore v2.1
 - CQRSLite v0.26.0
-- NSwag.AspNetCore v11.20.1
+- NSwag.AspNetCore v12.0.7
 - Microsoft.AspNetCore.SignalR.Core (1.0.1)
 - EFCore v2.1.4
 - EFCore.Sqlite v2.1.4
