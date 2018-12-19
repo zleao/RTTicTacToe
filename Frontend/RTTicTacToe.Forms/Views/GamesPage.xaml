@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <views:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:views="clr-namespace:RTTicTacToe.Forms.Views;assembly=RTTicTacToe.Forms.Views"
-             x:Class="RTTicTacToe.Forms.Views.GamesPage" 
-             Title="{Binding Title}" 
-             x:Name="BrowseGamesPage">
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       xmlns:views="clr-namespace:RTTicTacToe.Forms.Views;assembly=RTTicTacToe.Forms.Views"
+                       xmlns:converters="clr-namespace:RTTicTacToe.Forms.Converters"
+                       x:Class="RTTicTacToe.Forms.Views.GamesPage" 
+                       Title="{Binding Title}" 
+                       x:Name="BrowseGamesPage">
+    <views:BaseContentPage.Resources>
+        <ResourceDictionary>
+            <converters:NullToBoolConverter x:Key="NullToBool" />
+            <converters:EmptyListToBoolConverter x:Key="EmptyListToBool" />
+        </ResourceDictionary>
+    </views:BaseContentPage.Resources>
     <views:BaseContentPage.ToolbarItems>
         <ToolbarItem Text="Add" Command="{Binding CreateNewGameCommand}">
             <ToolbarItem.Icon>
@@ -18,27 +25,28 @@
                      Command="{Binding TryReconnectCommand}"/>
     </views:BaseContentPage.ToolbarItems>
     <views:BaseContentPage.Content>
-        <StackLayout>
-            <Label HorizontalTextAlignment="Center" Text="{Binding CurrentPlayer.Name}"/>
-            <ListView x:Name="GamesListView" 
-                      ItemsSource="{Binding Games}"
-                      VerticalOptions="FillAndExpand" 
-                      HasUnevenRows="true" 
-                      RefreshCommand="{Binding LoadGamesCommand}" 
-                      IsPullToRefreshEnabled="true" 
-                      IsRefreshing="{Binding IsLoadingGames, Mode=OneWay}" 
-                      CachingStrategy="RecycleElement" 
-                      ItemSelected="OnItemSelected">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <TextCell Text="{Binding GameName}" />
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-                <ListView.Footer>
-                    <StackLayout Orientation="Horizontal">
-                    </StackLayout>
-                </ListView.Footer>
-            </ListView>
-        </StackLayout>
+        <ListView x:Name="GamesListView" 
+                          ItemsSource="{Binding Games}"
+                          VerticalOptions="FillAndExpand" 
+                          HasUnevenRows="true" 
+                          RefreshCommand="{Binding LoadGamesCommand}" 
+                          IsPullToRefreshEnabled="true" 
+                          IsRefreshing="{Binding IsLoadingGames, Mode=OneWay}" 
+                          CachingStrategy="RecycleElement" 
+                          ItemSelected="OnItemSelected">
+            <ListView.Header>
+                <Label HorizontalTextAlignment="Center" Text="{Binding CurrentPlayer.Name}" FontSize="Medium"/>
+            </ListView.Header>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextCell Text="{Binding GameName}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.Footer>
+                <Label HorizontalTextAlignment="Center" 
+                       Text="No Game Available..." 
+                       IsVisible="{Binding Games, Converter={StaticResource EmptyListToBool}}"/>
+            </ListView.Footer>
+        </ListView>
     </views:BaseContentPage.Content>
 </views:BaseContentPage>
