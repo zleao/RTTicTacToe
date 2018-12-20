@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using CommonServiceLocator;
@@ -131,14 +132,19 @@ namespace RTTicTacToe.Forms.ViewModels
 
             try
             {
-                Games.Clear();
                 var games = await GameService.GetGamesAsync(true);
-                foreach (var game in games)
-                {
-                    var newGame = ServiceLocator.Current.GetInstance<GameDetailViewModel>();
-                    await newGame.InitializeValuesAsync(game, CurrentPlayer);
 
-                    Games.Add(newGame);
+                Games = new ObservableCollection<GameDetailViewModel>();
+
+                if (games?.Count() > 0)
+                {
+                    foreach (var game in games)
+                    {
+                        var newGame = ServiceLocator.Current.GetInstance<GameDetailViewModel>();
+                        await newGame.InitializeValuesAsync(game, CurrentPlayer);
+
+                        Games.Add(newGame);
+                    }
                 }
             }
             catch (Exception ex)

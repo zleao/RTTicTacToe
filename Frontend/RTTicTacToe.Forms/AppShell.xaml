@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Shell xmlns="http://xamarin.com/schemas/2014/forms" 
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+       xmlns:local="clr-namespace:RTTicTacToe.Forms.Views" 
+       RouteScheme="app" 
+       RouteHost="zleao.com" 
+       Route="RTTicTacToe" 
+       Title="RTTicTacToe"
+       x:Class="RTTicTacToe.Forms.AppShell">
+
+    <!-- Styles and Resources -->
+    <Shell.Resources>
+        <ResourceDictionary>
+            <Color x:Key="NavigationPrimary">#2196F3</Color>
+            <Style x:Key="BaseStyle" TargetType="Element">
+                <Setter Property="Shell.ShellBackgroundColor" Value="{StaticResource NavigationPrimary}" />
+                <Setter Property="Shell.ShellForegroundColor" Value="White" />
+                <Setter Property="Shell.ShellTitleColor" Value="White" />
+                <Setter Property="Shell.ShellDisabledColor" Value="#B4FFFFFF" />
+                <Setter Property="Shell.ShellUnselectedColor" Value="#95FFFFFF" />
+                <Setter Property="Shell.ShellTabBarBackgroundColor" Value="{StaticResource NavigationPrimary}" />
+                <Setter Property="Shell.ShellTabBarForegroundColor" Value="White"/>
+                <Setter Property="Shell.ShellTabBarUnselectedColor" Value="#95FFFFFF"/>
+                <Setter Property="Shell.ShellTabBarTitleColor" Value="White"/>
+            </Style>
+            <Style TargetType="ShellItem" BasedOn="{StaticResource BaseStyle}" />
+        </ResourceDictionary>
+    </Shell.Resources>
+    
+    <!-- Pages -->
+    <!--<ShellItem>
+        <ShellSection Title="Games" Icon="tab_feed.png">
+            <ShellContent ContentTemplate="{DataTemplate local:GamesPage}" />
+        </ShellSection>
+        <ShellSection Title="About" Icon="tab_about.png">
+            <ShellContent ContentTemplate="{DataTemplate local:AboutPage}" />
+        </ShellSection>
+    </ShellItem>-->
+    <ShellItem Title="Games" Icon="tab_feed.png">
+        <ShellSection>
+            <ShellContent ContentTemplate="{DataTemplate local:GamesPage}" />
+        </ShellSection>
+    </ShellItem>
+    <ShellItem Title="About" Icon="tab_about.png">
+        <ShellSection>
+            <ShellContent ContentTemplate="{DataTemplate local:AboutPage}" />
+        </ShellSection>
+    </ShellItem>
+</Shell>

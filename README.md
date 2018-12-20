@@ -17,8 +17,7 @@ Simple Asp.NetCore API with a CQRS/ES pattern. For real time communication, it u
 ## Frontend
 Support for **iOS** and **Android**
 - Xamarin Forms 3.4.0 ([XamForms3.4](https://github.com/zleao/RTTicTacToe/tree/XamForms3.4) branch)
-- Xamarin Forms 4.0 pre1 ([XamForms4](https://github.com/zleao/RTTicTacToe/tree/XamForms4) branch)
-
+- Xamarin Forms 4.0 pre1 ([master](https://github.com/zleao/RTTicTacToe/tree/master) and [XamForms4](https://github.com/zleao/RTTicTacToe/tree/XamForms4) branch)
 
 
 ## Run the code
