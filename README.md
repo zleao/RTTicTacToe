@@ -20,7 +20,6 @@ Support for **iOS** and **Android**
 - Xamarin Forms 4.0 pre1 ([master](https://github.com/zleao/RTTicTacToe/tree/master) and [XamForms4](https://github.com/zleao/RTTicTacToe/tree/XamForms4) branch)
 
 
-
 ## Run the code
 I've used VS2017 15.9.4 and VSMac 7.7 to implement and debug both the Backend and Frontend.
 You can try out the code by running the whole system locally or host the api in any online hosting service. Currently I'm hosting the api in Azure ([https://rttictactoe.azurewebsites.net/swagger](https://rttictactoe.azurewebsites.net/swagger)) and will continue to do so for testing. 
