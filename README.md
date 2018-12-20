@@ -1,7 +1,7 @@
 # RTTicTacToe
 Sample of fullstack solution with the implementation of an online and realtime TicTacToe game. The purpose is to test out some tools and frameworks. The solution provides a WebApi (currently hosted on [Azure](https://rttictactoe.azurewebsites.net/swagger)) and a frontend with a basic implementation of the TicTacToe game.
 
-**Note:** Always reffer to the readme file of the master branch, to get the most up-to-date info.
+### **Always refer to the readme file of the [master](https://github.com/zleao/RTTicTacToe/tree/master) branch, to get the most up-to-date info.**
 
 ## Backend
 Simple Asp.NetCore API with a CQRS/ES pattern. For real time communication, it uses signalR. The data is persisted in a SQLite database with the use of EFCore (both for EventSourceing and read datamodel).
@@ -16,8 +16,8 @@ Simple Asp.NetCore API with a CQRS/ES pattern. For real time communication, it u
 
 ## Frontend
 Support for **iOS** and **Android**
-- Xamarin Forms 3.3.0 ([master](https://github.com/zleao/RTTicTacToe/tree/master) branch)
-- Xamarin Forms v4.0 pre1 ([XamForms4](https://github.com/zleao/RTTicTacToe/tree/XamForms4) branch)
+- Xamarin Forms 3.4.0 ([XamForms3.4](https://github.com/zleao/RTTicTacToe/tree/XamForms3.4) branch)
+- Xamarin Forms 4.0 pre1 ([master](https://github.com/zleao/RTTicTacToe/tree/master) and [XamForms4](https://github.com/zleao/RTTicTacToe/tree/XamForms4) branch)
 
 
 
