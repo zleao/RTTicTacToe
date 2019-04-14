@@ -6,7 +6,6 @@ using RTTicTacToe.CQRS.ReadModel.Events;
 using RTTicTacToe.CQRS.Tests.TestHelpers;
 using RTTicTacToe.CQRS.WriteModel.Commands;
 using RTTicTacToe.CQRS.WriteModel.Domain;
-using RTTicTacToe.CQRS.WriteModel.Domain.Exceptions;
 using RTTicTacToe.CQRS.WriteModel.Handlers;
 using Xunit;
 

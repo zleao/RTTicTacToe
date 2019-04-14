@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NJsonSchema;
 using NSwag.AspNetCore;
 using RTTicTacToe.CQRS.Database;
 using RTTicTacToe.CQRS.Hubs;

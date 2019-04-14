@@ -1,5 +1,4 @@
-﻿using System;
-using CommonServiceLocator;
+﻿using CommonServiceLocator;
 using RTTicTacToe.Forms.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;

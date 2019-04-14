@@ -1,8 +1,6 @@
-﻿using System;
-using CommonServiceLocator;
+﻿using CommonServiceLocator;
 using RTTicTacToe.Forms.Services;
 using RTTicTacToe.Forms.ViewModels;
-using RTTicTacToe.Forms.Views;
 using Unity;
 using Unity.ServiceLocation;
 using Xamarin.Forms;
