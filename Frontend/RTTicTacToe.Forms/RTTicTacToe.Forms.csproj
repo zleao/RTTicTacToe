@@ -10,11 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="4.0.0.8055-pre1" />  
+    <PackageReference Include="CommonServiceLocator" Version="2.0.4" />
+    <PackageReference Include="Unity.ServiceLocation" Version="5.10.0" />
+    <PackageReference Include="Xamarin.Forms" Version="4.0.0.304370-pre8" />  
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="Acr.UserDialogs" Version="7.0.1" />
+    <PackageReference Include="Acr.UserDialogs" Version="7.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="1.1.0" />
-    <PackageReference Include="Unity" Version="5.8.13" />
+    <PackageReference Include="Unity" Version="5.10.3" />
     <PackageReference Include="System.Reflection.Emit" Version="4.3.0">
         <ExcludeAssets>all</ExcludeAssets>
     </PackageReference>
