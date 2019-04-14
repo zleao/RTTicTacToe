@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.zleao.RTTicTacToe">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.zleao.RTTicTacToe" android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="27" android:targetSdkVersion="28" />
 	<application android:label="RTTicTacToe.Forms.Android"></application>
 	<uses-permission android:name="android.permission.INTERNET" />
