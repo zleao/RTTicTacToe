@@ -1,7 +1,5 @@
-﻿using System;
-using Acr.UserDialogs;
+﻿using Acr.UserDialogs;
 using CommonServiceLocator;
-using RTTicTacToe.Forms.Services;
 using RTTicTacToe.Forms.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
