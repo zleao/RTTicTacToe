@@ -57,8 +57,8 @@ namespace RTTicTacToe.Forms.ViewModels
             set => SetProperty(ref _player2, value);
         }
 
-        private int[,] _board;
-        public int[,] Board
+        private int[][] _board;
+        public int[][] Board
         {
             get => _board;
             set => SetProperty(ref _board, value);

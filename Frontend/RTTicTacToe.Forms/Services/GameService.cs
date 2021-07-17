@@ -114,7 +114,7 @@ namespace RTTicTacToe.Forms.Services
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<int[,]> GetGameBoardAsync(Guid gameId)
+        public async Task<int[][]> GetGameBoardAsync(Guid gameId)
         {
             if (gameId == Guid.Empty)
             {
@@ -122,7 +122,7 @@ namespace RTTicTacToe.Forms.Services
             }
 
             var json = await client.GetStringAsync($"api/game/{gameId}/board");
-            return JsonConvert.DeserializeObject<int[,]>(json);
+            return JsonConvert.DeserializeObject<int[][]>(json);
         }
 
         public async Task<IList<Event>> GetGameEventsAsync(Guid gameId)
