@@ -13,7 +13,7 @@ using RTTicTacToe.WebApi.Models;
 namespace RTTicTacToe.WebApi.Controllers
 {
     /// <summary>
-    /// 
+    /// COntroler to handle Game related calls
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
     [Route("api/game")]
@@ -41,14 +41,14 @@ namespace RTTicTacToe.WebApi.Controllers
         [HttpGet("about")]
         public ActionResult About()
         {
-            return Content($"RTTicTacToe.WebApi v1.0.0{Environment.NewLine}Swagger definition: http://localhost:5000/swagger");
+            return Content($"RTTicTacToe.WebApi v1.0.0");
         }
 
         // GET api/game
         /// <summary>
         /// Gets all games.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>List with all the existing games</returns>
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<GameDto>), 200)]
         [ProducesResponseType(400)]
@@ -59,10 +59,10 @@ namespace RTTicTacToe.WebApi.Controllers
 
         // GET api/game/<id>        
         /// <summary>
-        /// Gets the game by identifier.
+        /// Gets a game by an identifier.
         /// </summary>
         /// <param name="id">The identifier.</param>
-        /// <returns></returns>
+        /// <returns>Game with the requested identifier</returns>
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(GameDto), 200)]
         [ProducesResponseType(400)]
@@ -76,7 +76,6 @@ namespace RTTicTacToe.WebApi.Controllers
         /// Creates a new game.
         /// </summary>
         /// <param name="name">The name.</param>
-        /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
@@ -107,7 +106,6 @@ namespace RTTicTacToe.WebApi.Controllers
         /// </summary>
         /// <param name="id">The game identifier.</param>
         /// <param name="model">The add player model.</param>
-        /// <returns></returns>
         [HttpPost("{id}/player")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
@@ -146,7 +144,6 @@ namespace RTTicTacToe.WebApi.Controllers
         /// </summary>
         /// <param name="id">The game identifier.</param>
         /// <param name="model">The make movement model.</param>
-        /// <returns></returns>
         [HttpPost("{id}/movements")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
@@ -192,7 +189,7 @@ namespace RTTicTacToe.WebApi.Controllers
         /// Gets the game board.
         /// </summary>
         /// <param name="id">The game identifier.</param>
-        /// <returns></returns>
+        /// <returns>Integer array with the game board definition</returns>
         [HttpGet("{id}/board")]
         [ProducesResponseType(typeof(IEnumerable<int[,]>), 200)]
         [ProducesResponseType(400)]
@@ -206,7 +203,7 @@ namespace RTTicTacToe.WebApi.Controllers
         /// Gets the game events.
         /// </summary>
         /// <param name="id">The game identifier.</param>
-        /// <returns></returns>
+        /// <returns>List with the game events</returns>
         [HttpGet("{id}/events")]
         [ProducesResponseType(typeof(IEnumerable<EventDto>), 200)]
         [ProducesResponseType(400)]

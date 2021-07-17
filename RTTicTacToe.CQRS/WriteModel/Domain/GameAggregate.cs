@@ -12,7 +12,7 @@ namespace RTTicTacToe.CQRS.WriteModel.Domain
 
         private bool _gameStarted;
         private bool _gameFinished;
-        private readonly int[,] _gameBoard = new int[3, 3];
+        private readonly int[][] _gameBoard = new int[][] { new int[3] , new int[3] };
 
         private Guid _player1Id = Guid.Empty;
         private Guid _player2Id = Guid.Empty;
@@ -65,7 +65,7 @@ namespace RTTicTacToe.CQRS.WriteModel.Domain
                 throw new MovementOutOfBoundsException();
             }
 
-            if (_gameBoard[movementX, movementY] != 0)
+            if (_gameBoard[movementX][movementY] != 0)
             {
                 throw new MovementAlreadyTakenException();
             }
@@ -159,7 +159,7 @@ namespace RTTicTacToe.CQRS.WriteModel.Domain
 
         private void Apply(MovementMade e)
         {
-            _gameBoard[e.X, e.Y] = _playersTurn;
+            _gameBoard[e.X][e.Y] = _playersTurn;
 
             if (GameHelper.CheckGameFinished(_gameBoard))
             {
