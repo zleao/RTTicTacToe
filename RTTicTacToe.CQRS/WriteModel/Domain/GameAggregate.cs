@@ -12,7 +12,7 @@ namespace RTTicTacToe.CQRS.WriteModel.Domain
 
         private bool _gameStarted;
         private bool _gameFinished;
-        private readonly int[][] _gameBoard = new int[][] { new int[3] , new int[3] };
+        private readonly int[][] _gameBoard = new int[][] { new int[3] , new int[3], new int[3] };
 
         private Guid _player1Id = Guid.Empty;
         private Guid _player2Id = Guid.Empty;

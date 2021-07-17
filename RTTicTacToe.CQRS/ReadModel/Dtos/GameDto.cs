@@ -19,7 +19,7 @@ namespace RTTicTacToe.CQRS.ReadModel.Dtos
             Id = id;
             Name = name;
             Version = version;
-            Board = new int[][] { new int[3], new int[3] };
+            Board = new int[][] { new int[3], new int[3], new int[3] };
         }
     }
 }

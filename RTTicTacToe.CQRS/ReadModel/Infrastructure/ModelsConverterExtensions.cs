@@ -58,7 +58,7 @@ namespace RTTicTacToe.CQRS.ReadModel.Infrastructure
             {
                 CreationDate = game.CreationDate,
                 LastChangeDate = game.LastChangeDate,
-                Board = JsonConvert.DeserializeObject<int[][]>(game.BoardJsonString ?? string.Empty) ?? new int[][] { new int[3], new int[3] },
+                Board = JsonConvert.DeserializeObject<int[][]>(game.BoardJsonString ?? string.Empty) ?? new int[][] { new int[3], new int[3], new int[3] },
                 Player1 = game.Player1.ConvertToModelDto(),
                 Player2 = game.Player2.ConvertToModelDto(),
                 Winner = game.Winner.ConvertToModelDto()

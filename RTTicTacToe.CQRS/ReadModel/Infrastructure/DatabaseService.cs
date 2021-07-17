@@ -87,17 +87,21 @@ namespace RTTicTacToe.CQRS.ReadModel.Infrastructure
         private async Task UpdatePlayerAsync(Guid gameId, int gameVersion, PlayerDto player, int playerNumber)
         {
             var dateTimeNow = DateTime.Now;
-
-            var dbGame = await _databaseContext.Games.FirstAsync(g => g.Id == gameId);
-
+            
             //Update or create the player
             var playerDb = await _databaseContext.Players.FirstOrDefaultAsync(p => p.Id == player.Id);
             if (playerDb == null)
             {
                 playerDb = player.ConvertToModelDb();
                 playerDb.CreationDate = dateTimeNow;
+                await _databaseContext.Players.AddAsync(playerDb);
             }
             playerDb.LastChangeDate = dateTimeNow;
+
+            await _databaseContext.SaveChangesAsync();
+
+            //Update game
+            var dbGame = await _databaseContext.Games.FirstAsync(g => g.Id == gameId);
 
             dbGame.LastChangeDate = dateTimeNow;
             dbGame.Version = gameVersion;
@@ -134,8 +138,8 @@ namespace RTTicTacToe.CQRS.ReadModel.Infrastructure
             var dbGame = await _databaseContext.Games.FirstAsync(g => g.Id == gameId);
 
             //update the board value
-            var board = JsonConvert.DeserializeObject<int[,]>(dbGame.BoardJsonString ?? string.Empty) ?? new int[3, 3];
-            board[x, y] = playerNumber;
+            var board = JsonConvert.DeserializeObject<int[][]>(dbGame.BoardJsonString ?? string.Empty) ?? new int[][] { new int[3], new int[3], new int[3] };
+            board[x][y] = playerNumber;
 
             dbGame.BoardJsonString = JsonConvert.SerializeObject(board);
             dbGame.LastChangeDate = DateTime.Now;
