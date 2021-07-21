@@ -3,8 +3,16 @@ using System.Text;
 
 namespace RTTicTacToe.WebApi.Extensions
 {
+    /// <summary>
+    /// Extensions for Exception class
+    /// </summary>
     public static class ExceptionExtensions
     {
+        /// <summary>
+        /// Converts Exception to a readable string
+        /// </summary>
+        /// <param name="ex"></param>
+        /// <returns></returns>
         public static string ExceptionToString(this Exception ex)
         {
             StringBuilder sb = new StringBuilder();

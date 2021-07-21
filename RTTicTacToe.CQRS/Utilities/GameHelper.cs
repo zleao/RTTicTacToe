@@ -11,12 +11,12 @@ namespace RTTicTacToe.CQRS.Utilities
             return CheckAllRows(game.Board) || CheckAllDiagonals(game.Board);
         }
 
-        public static bool CheckGameFinished(int[,] gameBoard)
+        public static bool CheckGameFinished(int[][] gameBoard)
         {
             return CheckAllRows(gameBoard) || CheckAllDiagonals(gameBoard);
         }
 
-        private static bool CheckAllRows(int[,] gameBoard)
+        private static bool CheckAllRows(int[][] gameBoard)
         {
             int countforP1 = 0;
             int countforP2 = 0;
@@ -27,11 +27,11 @@ namespace RTTicTacToe.CQRS.Utilities
                 countforP2 = 0;
                 for (int j = 0; j < 3; j++)
                 {
-                    if (gameBoard[i, j] == 1)
+                    if (gameBoard[i][j] == 1)
                     {
                         countforP1++;
                     }
-                    if (gameBoard[i, j] == 2)
+                    if (gameBoard[i][j] == 2)
                     {
                         countforP2++;
                     }
@@ -52,7 +52,7 @@ namespace RTTicTacToe.CQRS.Utilities
             return false;
         }
 
-        private static bool CheckAllDiagonals(int[,] gameBoard)
+        private static bool CheckAllDiagonals(int[][] gameBoard)
         {
             int countforP1 = 0;
             int countforP2 = 0;
@@ -61,12 +61,12 @@ namespace RTTicTacToe.CQRS.Utilities
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    if (i == j && gameBoard[j, i] == 1)
+                    if (i == j && gameBoard[j][i] == 1)
                     {
                         countforP1++;
                     }
 
-                    if (i == j && gameBoard[j, i] == 2)
+                    if (i == j && gameBoard[j][i] == 2)
                     {
                         countforP2++;
                     }

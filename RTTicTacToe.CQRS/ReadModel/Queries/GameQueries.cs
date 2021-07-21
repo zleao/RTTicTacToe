@@ -45,7 +45,7 @@ namespace RTTicTacToe.CQRS.ReadModel.Queries
             return _databaseService.GetPlayerGamesAsync(playerId);
         }
 
-        public Task<int[,]> GetGameBoardAsync(Guid gameId)
+        public Task<int[][]> GetGameBoardAsync(Guid gameId)
         {
             return _databaseService.GetGameBoardAsync(gameId);
         }
