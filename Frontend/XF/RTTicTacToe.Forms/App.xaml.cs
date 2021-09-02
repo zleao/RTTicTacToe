@@ -10,8 +10,11 @@ namespace RTTicTacToe.Forms
 {
     public partial class App : Application
     {
-        public static string AzureBackendUrl = "https://rttictactoe.azurewebsites.net";
-        //public static string AzureBackendUrl = "https://localhost:44397";
+        public static string AzureBackendUrl = "https://rttictactoe.azurewebsites.net";         // Dev env
+        //public static string AzureBackendUrl = "https://localhost:44397";                     // IIS with Swagger
+        //public static string AzureBackendUrl = "http://localhost:5000";                       // Console
+        //public static string AzureBackendUrl = "http://10.0.2.2:5000";                        // Android emulator => localhost:5000
+        //public static string AzureBackendUrl = "http://10.0.2.2:44397";                       // Android emulator => localhost:44397
 
         public App()
         {

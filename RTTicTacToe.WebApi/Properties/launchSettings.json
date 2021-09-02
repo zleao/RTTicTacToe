@@ -20,7 +20,7 @@
     "RTTicTacToe.WebApi": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/values",
+      "launchUrl": "api/game/about",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
