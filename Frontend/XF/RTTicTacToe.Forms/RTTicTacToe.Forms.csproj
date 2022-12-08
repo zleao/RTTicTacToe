@@ -9,7 +9,7 @@
     <PackageReference Include="Acr.UserDialogs" Version="7.1.0.514" />
     <PackageReference Include="CommonServiceLocator" Version="2.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.8" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="Unity" Version="5.11.10" />
     <PackageReference Include="Unity.ServiceLocation" Version="5.11.1" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2083" />  
